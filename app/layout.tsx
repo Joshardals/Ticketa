@@ -15,6 +15,13 @@ export const metadata: Metadata = {
     "Your gateway to student events—browse, buy, and manage tickets effortlessly.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: "0",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
