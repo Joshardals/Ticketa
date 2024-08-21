@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/form/LoginForm";
 export default function HomePage() {
   return (
     <main>
-      <header className="p-5 maxCenter fixed left-0 right-0 top-0">
+      <header className="p-5 maxCenter fixed left-0 right-0 top-0 bg-softWhite">
         <h1 className="text-2xl font-extrabold">
           Ticketa<span className=" text-deepRed">.</span>
         </h1>
