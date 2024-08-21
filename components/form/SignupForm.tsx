@@ -21,6 +21,7 @@ export function SignupForm() {
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 

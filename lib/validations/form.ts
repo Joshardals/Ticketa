@@ -19,17 +19,14 @@ export const SignUpValidation: z.ZodType<AuthValidationType> = z
       .string()
       .min(3, "Username must be at least 3 characters long")
       .max(200, "Username cannot exceed 200 characters"),
-    email: z.string().email(),
+    email: z.string().email("Invalid email address"),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
       .max(20, "Password cannot exceed 20 characters"),
     confirmPassword: z.string(),
   })
-  .refine((data) => {
-    data.password === data.confirmPassword,
-      {
-        path: ["confirmPassword"], // Set the path of the error to the confirmPassword field
-        message: "Passwords do not match!",
-      };
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"], // Set the path of the error to the confirmPassword field
+    message: "Passwords do not match!",
   });

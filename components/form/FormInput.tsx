@@ -69,7 +69,7 @@ export function FormInput({
               )}
             </div>
           </FormControl>
-          <FormMessage className="text-red-500 text-xs font-normal" />
+          <FormMessage className="text-deepRed text-xs font-normal" />
         </FormItem>
       )}
     />
