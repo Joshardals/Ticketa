@@ -59,7 +59,7 @@ export function LoginForm() {
         {error && <p className="text-deepRed text-xs font-bold">{error}</p>}
 
         <ButtonInput loading={loading} label="Login" />
-        <p className="text-sm">
+        <p className="text-sm text-center">
           Don’t have an account?{" "}
           <Link href="/signup" className="text-deepRed font-semibold">
             Sign up here

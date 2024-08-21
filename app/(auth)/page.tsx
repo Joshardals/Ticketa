@@ -9,8 +9,8 @@ export default function HomePage() {
         </h1>
       </header>
 
-      <section className="px-5 maxCenter text-center contentCenter w-full">
-        <div className="mb-8">
+      <section className="px-5 maxCenter contentCenter w-full">
+        <div className="mb-8 text-center">
           <h2 className="text-xl max-md:text-lg font-bold">
             Welcome to Ticketa
           </h2>
