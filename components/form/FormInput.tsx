@@ -64,11 +64,7 @@ export function FormInput({
                   className="absolute top-0 right-0 h-full flex items-center px-5 cursor-pointer bg-snow rounded-md select-none"
                   onClick={toggleInputType}
                 >
-                  {eyeOpen ? (
-                    <FaEyeSlash className="text-onyx/50 text-lg" />
-                  ) : (
-                    <FaEye className=" text-onyx/50 text-lg" />
-                  )}
+                  {eyeOpen ? <FaEyeSlash /> : <FaEye />}
                 </div>
               )}
             </div>

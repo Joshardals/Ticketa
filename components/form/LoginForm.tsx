@@ -26,6 +26,7 @@ export function LoginForm() {
     try {
       setLoading(true);
       setError(null);
+      console.log(values);
     } catch (error: any) {
       console.log(`An unexpected error occured: ${error.message}`);
       setError("An unexpected error occurred. Please try again.");
@@ -55,16 +56,15 @@ export function LoginForm() {
           loading={loading}
         />
 
-        {error && <p className="text-red-500 text-xs font-bold">{error}</p>}
+        {error && <p className="text-deepRed text-xs font-bold">{error}</p>}
 
+        <ButtonInput loading={loading} label="Login" />
         <p className="text-sm">
           Don’t have an account?{" "}
-          <Link href="/signup" className="text-[#E63946] font-semibold">
+          <Link href="/signup" className="text-deepRed font-semibold">
             Sign up here
           </Link>
         </p>
-
-        <ButtonInput loading={loading} label="Login" />
       </form>
     </Form>
   );
