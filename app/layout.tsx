@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/shared/Header";
 
 const nunito = Nunito_Sans({
   subsets: ["latin"],
@@ -10,9 +11,9 @@ const nunito = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Ticketa | Home",
+  title: "Login | Ticketa",
   description:
-    "Your gateway to student events—browse, buy, and manage tickets effortlessly.",
+    "Log in to your Ticketa account and access student events—browse, buy, and manage your tickets effortlessly.",
 };
 
 export const viewport = {
@@ -29,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nunito.variable}>{children}</body>
+      <body className={nunito.variable}>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
