@@ -1,4 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  
+
+@layer utilities {
+  html,
+  body {
+    @apply p-0 m-0 text-base leading-6 w-full min-h-[100svh] bg-softWhite text-darkCharcoal font-nunito scroll-smooth;
+  }
+
+  .contentCenter {
+    @apply flex flex-col items-center justify-center min-h-screen;
+  }
+  .maxCenter {
+    @apply max-w-[1200px] mx-auto;
+  }
+}
