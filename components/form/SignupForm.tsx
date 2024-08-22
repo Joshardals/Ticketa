@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signupUser } from "@/lib/actions/auth.action";
 
 export function SignupForm() {
   const [error, setError] = useState<string | null>();
@@ -26,7 +27,29 @@ export function SignupForm() {
   });
 
   const onSubmit = async (values: AuthValidationType) => {
-    console.log(values);
+    try {
+      setLoading(true); // Set the loading state to be true
+      setError(null); // Clear previous errors
+
+      const result = await signupUser({
+        fullname: values.fullname,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+
+      if (!result.success) {
+        setError(result.msg);
+        return;
+      }
+
+      window.alert("User created successfully");
+    } catch (error: any) {
+      console.log(`Error signing up: ${error.message}`);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
