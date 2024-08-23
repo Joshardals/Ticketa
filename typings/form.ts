@@ -5,4 +5,5 @@ export interface AuthValidationType {
 
   fullname?: string;
   username?: string;
+  gender?: string;
 }

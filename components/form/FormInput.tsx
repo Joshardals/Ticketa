@@ -5,9 +5,19 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 
 interface FormInputProps {
@@ -20,6 +30,18 @@ interface FormInputProps {
   // Button Typings.
   label?: string;
   variant?: any;
+}
+
+export function ButtonInput({ loading, label, variant }: FormInputProps) {
+  return (
+    <Button
+      variant={variant || "ticketa"}
+      disabled={loading}
+      className="w-full"
+    >
+      {loading ? <FaSpinner className=" animate-spin" /> : label}
+    </Button>
+  );
 }
 
 export function FormInput({
@@ -76,14 +98,27 @@ export function FormInput({
   );
 }
 
-export function ButtonInput({ loading, label, variant }: FormInputProps) {
+export function SelectInput({ form, name }: FormInputProps) {
   return (
-    <Button
-      variant={variant || "ticketa"}
-      disabled={loading}
-      className="w-full"
-    >
-      {loading ? <FaSpinner className=" animate-spin" /> : label}
-    </Button>
+    <FormField
+      control={form.control}
+      name={name!}
+      render={({ field }) => (
+        <FormItem>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Your Gender for a Personalized Experience" />
+              </SelectTrigger>
+            </FormControl>
+            <SelectContent>
+              <SelectItem value="Male">Male</SelectItem>
+              <SelectItem value="Female">Female</SelectItem>
+            </SelectContent>
+          </Select>
+          <FormMessage className="text-deepRed text-xs font-normal" />
+        </FormItem>
+      )}
+    />
   );
 }

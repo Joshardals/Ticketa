@@ -3,6 +3,7 @@ import { AuthValidationType } from "@/typings/form";
 import { ID } from "node-appwrite";
 import { cookies } from "next/headers";
 import { createAdminClient, createSessionClient } from "@/lib/appwrite.config";
+import { createUserInfo } from "./database.action";
 import { redirect } from "next/navigation";
 
 // So this is a server action to get the current logged in user
@@ -32,7 +33,6 @@ export async function signInUser(data: AuthValidationType) {
     });
 
     // If Successful
-    console.log(session);
     return { success: true };
   } catch (error: any) {
     return { success: false, msg: error.message };
@@ -52,9 +52,16 @@ export async function signupUser(data: AuthValidationType) {
 
     await signInUser({ email: data.email, password: data.password }); // Sign In the User
 
-    const { $id: userId } = response;
+    const { $id: userId, email } = response;
 
-    console.log(response);
+    await createUserInfo({
+      userId,
+      username: data.username!,
+      email,
+      name: data.fullname!,
+      gender: data.gender!,
+    }); // This partuclar createUserInfo function is just to create User Documents in the Database.
+
     return { success: true };
   } catch (error: any) {
     return { success: false, msg: error.message };

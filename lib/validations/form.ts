@@ -25,6 +25,9 @@ export const SignUpValidation: z.ZodType<AuthValidationType> = z
       .min(8, "Password must be at least 8 characters long")
       .max(20, "Password cannot exceed 20 characters"),
     confirmPassword: z.string(),
+    gender: z.string({
+      required_error: "Select Your Gender for a Personalized Experience",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"], // Set the path of the error to the confirmPassword field

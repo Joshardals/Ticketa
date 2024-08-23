@@ -1,6 +1,10 @@
 "use client";
 import { AuthValidationType } from "@/typings/form";
-import { ButtonInput, FormInput } from "@/components/form/FormInput";
+import {
+  ButtonInput,
+  FormInput,
+  SelectInput,
+} from "@/components/form/FormInput";
 import { Form } from "@/components/ui/form";
 import Link from "next/link";
 import { SignUpValidation } from "@/lib/validations/form";
@@ -21,6 +25,7 @@ export function SignupForm() {
       fullname: "",
       username: "",
       email: "",
+      gender: "",
       password: "",
       confirmPassword: "",
     },
@@ -35,6 +40,7 @@ export function SignupForm() {
         fullname: values.fullname,
         username: values.username,
         email: values.email,
+        gender: values.gender,
         password: values.password,
       });
 
@@ -43,7 +49,7 @@ export function SignupForm() {
         return;
       }
 
-      window.alert("User created successfully");
+      alert("User created successfully");
     } catch (error: any) {
       console.log(`Error signing up: ${error.message}`);
       setError("An unexpected error occurred. Please try again.");
@@ -80,6 +86,8 @@ export function SignupForm() {
           placeholder="Email"
           loading={loading}
         />
+
+        <SelectInput form={form} name="gender" />
 
         <FormInput
           form={form}
