@@ -34,4 +34,4 @@
 1. Clone the repository:
    ```bash
    git clone https://github.com/Joshardals/ticketa.git
-   cd ticketa
+   cd ticketa. 
