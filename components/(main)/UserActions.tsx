@@ -47,7 +47,11 @@ export function UserActions({
         {navLinks.map((item, index) => (
           <DropdownMenuItem
             key={index}
-            className={`${item.label === "Home" && "hidden"}`}
+            className={`${
+              item.label === "Home" || item.label === "Explore Events"
+                ? "hidden"
+                : ""
+            } md:hidden`}
           >
             <Link href={item.href}>{item.label}</Link>
           </DropdownMenuItem>

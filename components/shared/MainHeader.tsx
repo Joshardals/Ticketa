@@ -17,9 +17,9 @@ export function MainHeader() {
       <UserProfile />
 
       {/* Hamburger Menu */}
-      <div className="pt-1 max-h-5">
+      {/* <div className="pt-1 max-h-5">
         <NavToggle />
-      </div>
+      </div>  I don't know if I will need this sha. But let's see.*/}
     </header>
   );
 }
