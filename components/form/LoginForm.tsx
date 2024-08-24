@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signInUser } from "@/lib/actions/auth.action";
 
 export function LoginForm() {
   const [error, setError] = useState<string | null>();
@@ -26,11 +27,23 @@ export function LoginForm() {
     try {
       setLoading(true);
       setError(null);
-      console.log(values);
+
+      const result = await signInUser({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (!result.success) {
+        setError(result.msg);
+        return;
+      }
+
+      alert("User signed in  successfully");
     } catch (error: any) {
       console.log(`An unexpected error occured: ${error.message}`);
       setError("An unexpected error occurred. Please try again.");
     } finally {
+      setLoading(false);
     }
   };
   return (

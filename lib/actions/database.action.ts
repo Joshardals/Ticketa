@@ -32,7 +32,7 @@ export async function createUserInfo(data: UserInfoParams) {
 export async function getCurrentUserInfo() {
   try {
     const user = await getCurrentUser();
-    const { email: userId } = user;
+    const { $id: userId } = user;
 
     const data = await databases.listDocuments(
       APPWRITE_DATABASE_ID as string,
@@ -40,7 +40,7 @@ export async function getCurrentUserInfo() {
       [Query.equal("userId", userId)]
     );
 
-    return { success: true, userInfo: data.documents[0] };
+    return { success: true, data: data.documents[0] };
   } catch (error: any) {
     console.error(
       `Failed to fetch User Info Document from the DB: ${error.message}`
