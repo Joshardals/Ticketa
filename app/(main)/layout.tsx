@@ -20,7 +20,7 @@ export default async function HomeLayout({
   return (
     <main>
       {/* <MainHeader /> */}
-      <div>{children}</div>
+      <div className="bg-darkCharcoal">{children}</div>
     </main>
   );
 }

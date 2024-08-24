@@ -1,6 +1,6 @@
-import { MainHeader } from "@/components/shared/MainHeader";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { MainHeader } from "@/components/shared/MainHeader";
 
 export default function Homepage() {
   return (

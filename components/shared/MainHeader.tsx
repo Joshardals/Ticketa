@@ -1,5 +1,4 @@
 import { NavLinks } from "./NavLinks";
-import { NavToggle } from "./NavToggle";
 import { UserProfile } from "./UserProfile";
 
 export function MainHeader() {
