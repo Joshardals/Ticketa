@@ -4,7 +4,7 @@ import { MainHeader } from "@/components/shared/MainHeader";
 
 export default function Homepage() {
   return (
-    <main className="text-softWhite">
+    <main className="text-softWhite overflow-hidden">
       <section className="h-screen bg-[url('/assets/party.jpg')] bg-cover bg-center relative">
         <div className="absolute bg-darkCharcoal inset-0 opacity-80" />
         <MainHeader />
