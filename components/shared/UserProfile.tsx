@@ -1,5 +1,11 @@
-import { createAvatar } from "@dicebear/core";
-import { adventurer, lorelei } from "@dicebear/collection";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { getCurrentUserInfo } from "@/lib/actions/database.action";
 import { getColorForId } from "@/lib/utils";
 
@@ -14,9 +20,10 @@ export async function UserProfile() {
   const bgColor = getColorForId(data.$id);
 
   return (
-    <div className="justify-self-end rounded-full">
+    <div className="rounded-full max-sm:w-full flex justify-end">
       <div
-        className={`cursor-pointer rounded-full size-10 text-softWhite flex items-center justify-center bg-[${bgColor}]`}
+        className={`cursor-pointer transition-all duration-100 ease-linear border-0 hover:border-2 hover:border-sunsetOrange rounded-full size-10 text-softWhite flex items-center justify-center `}
+        style={{ background: bgColor }}
       >
         {initials}
       </div>

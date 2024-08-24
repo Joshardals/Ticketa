@@ -19,7 +19,7 @@ export default async function HomeLayout({
 
   return (
     <main>
-      <MainHeader />
+      {/* <MainHeader /> */}
       <div>{children}</div>
     </main>
   );

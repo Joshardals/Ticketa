@@ -14,4 +14,27 @@
   .maxCenter {
     @apply max-w-[1200px] mx-auto;
   }
+
+  .navToggle {
+    @apply block relative z-10 cursor-pointer;
+  }
+
+  .navToggle span {
+    @apply relative block w-[22px] h-[2px] mb-[0.3rem] z-10;
+
+    transform-origin: 1.5px 1px;
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+  }
+
+  .navToggle span.active:first-child {
+    @apply rotate-45;
+  }
+
+  .navToggle span.active:nth-child(2) {
+    @apply transition-opacity duration-1000 opacity-0;
+  }
+
+  .navToggle span.active:last-child {
+    @apply -rotate-45;
+  }
 }
