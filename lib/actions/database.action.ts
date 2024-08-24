@@ -4,7 +4,8 @@ import { databases } from "../appwrite.config";
 import { getCurrentUser } from "./auth.action";
 import { ID, Query } from "node-appwrite";
 
-const { APPWRITE_DATABASE_ID, APPWRITE_USERS_ID } = process.env;
+const { APPWRITE_DATABASE_ID, APPWRITE_USERS_ID, APPWRITE_EVENTS_ID } =
+  process.env;
 
 // Creating User Info Document in the DB
 export async function createUserInfo(data: UserInfoParams) {
@@ -44,6 +45,23 @@ export async function getCurrentUserInfo() {
   } catch (error: any) {
     console.error(
       `Failed to fetch User Info Document from the DB: ${error.message}`
+    );
+    return { success: false, msg: error.message };
+  }
+}
+
+export async function getEvents() {
+  try {
+    const data = await databases.listDocuments(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_EVENTS_ID as string,
+      []
+    );
+
+    return { success: true, data: data.documents };
+  } catch (error: any) {
+    console.error(
+      `Failed to fetch Events Document from the DB: ${error.message}`
     );
     return { success: false, msg: error.message };
   }

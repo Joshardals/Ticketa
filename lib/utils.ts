@@ -16,6 +16,29 @@ const darkColors = [
   "#383838", // Slate Gray
 ];
 
+export function formatDate(isoString: string): string {
+  // Parse the date string without timezone adjustments
+  const date = new Date(isoString);
+
+  // Manually format the parts of the date
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+
+  let hours = date.getUTCHours();
+  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+  const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+  const milliseconds = String(date.getUTCMilliseconds()).padStart(3, "0");
+
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
+  const formattedHours = String(hours).padStart(2, "0");
+
+  return `${month}/${day}/${year} ${formattedHours}:${minutes} ${ampm}`;
+}
+
+// You don't need to know what the code above does, it is basically just formatting the date properly. (Dont't waste your time trying to understnad it.)
+
 export function getColorForId(id: string) {
   const hash = id
     .split("")
