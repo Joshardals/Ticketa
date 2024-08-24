@@ -1,13 +1,6 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { getCurrentUserInfo } from "@/lib/actions/database.action";
 import { getColorForId } from "@/lib/utils";
+import { UserActions } from "../(main)/UserActions";
 
 export async function UserProfile() {
   const { data } = await getCurrentUserInfo();
@@ -19,14 +12,5 @@ export async function UserProfile() {
     .join("");
   const bgColor = getColorForId(data.$id);
 
-  return (
-    <div className="rounded-full max-sm:w-full flex justify-end">
-      <div
-        className={`cursor-pointer transition-all duration-100 ease-linear border-0 hover:border-2 hover:border-sunsetOrange rounded-full size-10 text-softWhite flex items-center justify-center `}
-        style={{ background: bgColor }}
-      >
-        {initials}
-      </div>
-    </div>
-  );
+  return <UserActions bgColor={bgColor} initials={initials} />;
 }
