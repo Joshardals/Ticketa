@@ -13,13 +13,15 @@ export async function Events() {
       <EventsCard /> */}
 
       {data.map((event, index) => (
-        <EventsCard event={event} index={index} />
+        <div key={index}>
+          <EventsCard event={event} />
+        </div>
       ))}
     </div>
   );
 }
 
-export function EventsCard({ event, index }: { event: any; index: number }) {
+export function EventsCard({ event }: { event: any }) {
   return (
     <div
       key={event.$id}
