@@ -11,7 +11,8 @@ const buttonVariants = cva(
       variant: {
         default: "",
         ticketa: "bg-navyBlue text-softWhite",
-        home: "bg-deepRed hover:bg-deepRed/70",
+        home: "bg-deepRed hover:bg-deepRed/90",
+        ticket: "bg-navyBlue hover:bg-navyBlue/90 text-softWhite",
       },
       size: {
         default: "h-10 px-4 py-2",

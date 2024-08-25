@@ -5,7 +5,7 @@
 @layer utilities {
   html,
   body {
-    @apply p-0 m-0 text-base leading-6 w-full text-darkCharcoal font-nunito scroll-smooth;
+    @apply p-0 m-0 text-base leading-6 w-full bg-softWhite text-darkCharcoal font-nunito scroll-smooth;
   }
 
   .contentCenter {

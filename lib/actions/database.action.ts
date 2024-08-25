@@ -30,6 +30,7 @@ export async function createUserInfo(data: UserInfoParams) {
   }
 }
 
+// Trying to get the current logged in user info.
 export async function getCurrentUserInfo() {
   try {
     const user = await getCurrentUser();
@@ -50,6 +51,7 @@ export async function getCurrentUserInfo() {
   }
 }
 
+// trying to get all Events
 export async function getEvents() {
   try {
     const data = await databases.listDocuments(
@@ -59,6 +61,24 @@ export async function getEvents() {
     );
 
     return { success: true, data: data.documents };
+  } catch (error: any) {
+    console.error(
+      `Failed to fetch Events Document from the DB: ${error.message}`
+    );
+    return { success: false, msg: error.message };
+  }
+}
+
+// Trying to get Events By Id.
+export async function getEventsById(id: string) {
+  try {
+    const data = await databases.listDocuments(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_EVENTS_ID as string,
+      [Query.equal("eventId", id)]
+    );
+
+    return { success: true, data: data.documents[0] };
   } catch (error: any) {
     console.error(
       `Failed to fetch Events Document from the DB: ${error.message}`

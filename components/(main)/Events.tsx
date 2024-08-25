@@ -2,6 +2,7 @@ import { getEvents } from "@/lib/actions/database.action";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { SearchBar } from "../shared/SearchBar";
 
 export async function Events() {
   const { data } = await getEvents();
@@ -25,7 +26,7 @@ export function EventsCard({ event }: { event: any }) {
   return (
     <div
       key={event.$id}
-      className=" bg-lightGray rounded-lg p-2 shadow-lg text-pretty"
+      className=" bg-paleYellow rounded-lg p-2 shadow-lg text-pretty cursor-pointer"
     >
       <Image
         src={event.imgUrl}

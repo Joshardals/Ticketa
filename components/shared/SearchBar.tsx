@@ -7,11 +7,10 @@ export function SearchBar() {
     <div className="relative cursor-pointer">
       <Input
         type="text"
-        placeholder="Search Events"
-        className="bg-lightGray cursor-pointer"
-        disabled
+        placeholder="Search for Events"
+        className="bg-paleYellow"
       />
-      <div className="absolute top-0 right-0 h-full flex items-center px-1">
+      <div className="absolute top-0 right-0 h-full flex items-center px-1 bg-paleYellow">
         <IoSearchSharp className="size-5 text-darkCharcoal" />
       </div>
     </div>

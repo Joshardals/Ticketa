@@ -1,16 +1,19 @@
 "use client";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function EventsHeader() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isEventDetailPage = pathname.startsWith("/events/");
   return (
     <div
-      className="flex items-center space-x-1 cursor-pointer p-5"
+      className="flex items-center space-x-1 cursor-pointer py-5"
       onClick={() => router.back()}
     >
       <IoMdArrowRoundBack />
-      <span>Home</span>
+      <span>{isEventDetailPage ? "Back to Events" : "Back Home"}</span>
     </div>
   );
 }
