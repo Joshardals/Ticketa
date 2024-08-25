@@ -6,7 +6,7 @@ export default function Homepage() {
   return (
     <main className="text-softWhite overflow-hidden">
       <section className="h-screen bg-[url('/assets/party.jpg')] bg-cover bg-center relative">
-        <div className="absolute bg-darkCharcoal inset-0 opacity-80" />
+        <div className="absolute bg-darkCharcoal inset-0 opacity-60" />
         <MainHeader />
 
         <div className="absolute left-0 right-0 px-5 maxCenter flex flex-col justify-center items-center h-full text-center">
