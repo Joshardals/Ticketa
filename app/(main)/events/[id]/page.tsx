@@ -14,7 +14,9 @@ export default async function EventPage({
   console.log(data);
   return (
     <div className="maxCenter">
-      <EventsHeader />
+      <div className="px-5">
+        <EventsHeader />
+      </div>
       <div className="flex justify-center p-5 space-y-4">
         <div className="bg-paleYellow p-5 rounded-lg max-w-2xl space-y-4">
           <h1 className="text-2xl font-bold">{data.title}</h1>

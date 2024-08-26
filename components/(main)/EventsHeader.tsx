@@ -3,8 +3,8 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function EventsHeader() {
-  const router = useRouter();
   const pathname = usePathname();
+  const router = useRouter();
 
   const isEventDetailPage = pathname.startsWith("/events/");
   return (
@@ -13,7 +13,7 @@ export default function EventsHeader() {
       onClick={() => router.back()}
     >
       <IoMdArrowRoundBack />
-      <span>{isEventDetailPage ? "Back to Events" : "Back Home"}</span>
+      <span>{isEventDetailPage ? "Go to Events" : "Home"}</span>
     </div>
   );
 }

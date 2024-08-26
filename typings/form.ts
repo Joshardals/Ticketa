@@ -7,3 +7,7 @@ export interface AuthValidationType {
   username?: string;
   gender?: string;
 }
+
+export interface CategoryValidationType {
+  category?: string;
+}

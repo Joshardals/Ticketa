@@ -8,8 +8,13 @@ export default function Eventspage() {
     <div className="maxCenter">
       <div className="flex justify-between items-center px-5">
         <EventsHeader />
-        <SearchBar />
+        <div className="max-sm:hidden">
+          <SearchBar />
+        </div>
         <Category />
+      </div>
+      <div className="px-5 mb-5 sm:hidden">
+        <SearchBar />
       </div>
 
       <Events />

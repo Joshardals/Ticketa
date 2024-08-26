@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { AuthValidationType } from "@/typings/form";
+import { AuthValidationType, CategoryValidationType } from "@/typings/form";
 import path from "path";
 
 // Form Validation for Login form.
@@ -33,3 +33,11 @@ export const SignUpValidation: z.ZodType<AuthValidationType> = z
     path: ["confirmPassword"], // Set the path of the error to the confirmPassword field
     message: "Passwords do not match!",
   });
+
+// Form Validation for Category.
+// export const CategoryValidationType: z.ZodType<CategoryValidationType> =
+//   z.object({
+//     category: z.string({
+//       required_error: "Select Your Gender for a Personalized Experience",
+//     }),
+//   });
