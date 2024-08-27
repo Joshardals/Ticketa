@@ -1,32 +1,18 @@
 "use client";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
-import { getCurrentUser } from "@/lib/actions/auth.action";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export function EventsCard({
   event,
   onLike,
+  hasLiked,
 }: {
   event: any;
   onLike: (eventId: string) => void;
+  hasLiked: boolean;
 }) {
-  const [hasLiked, setHasLiked] = useState<boolean | null>(null);
-  useEffect(() => {
-    const HasLiked = async () => {
-      // Get the current user
-      const user = await getCurrentUser();
-      const { $id: userId } = user;
-
-      if (event.likedEvents.includes(userId)) {
-        setHasLiked(true);
-      } else setHasLiked(false);
-    };
-
-    HasLiked();
-  }, []);
   return (
     <div
       key={event.$id}

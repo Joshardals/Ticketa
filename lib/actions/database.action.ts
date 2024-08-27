@@ -101,19 +101,27 @@ export async function updateLikeCount(eventId: string) {
       eventId
     );
 
+    // Check if the user has already liked the event
+    if (eventDoc.likedEvents.includes(userId)) {
+      return { success: false, msg: "You have already liked this event" };
+    }
+
+    // Add the user to the likedEvents array
+    const updatedLikedEvents = [...eventDoc.likedEvents, userId];
+
     // So Basically I am just updating the LikedEvents Array with user Ids, that is the id of the
     // current logged in user, if they like the events...
 
-    const data = await databases.updateDocument(
+    await databases.updateDocument(
       APPWRITE_DATABASE_ID as string,
       APPWRITE_EVENTS_ID as string,
       eventId,
       {
-        likedEvents: [...eventDoc.likedEvents, userId],
+        likedEvents: updatedLikedEvents,
       }
     );
 
-    return { success: true, data: data.documents };
+    return { success: true, data: updatedLikedEvents.length };
   } catch (error: any) {
     console.error("Error updating likes count:", error);
   }

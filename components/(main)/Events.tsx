@@ -4,17 +4,23 @@ import { EventsCard } from "./EventsCard";
 import EventsFallback from "@/components/ui/skeletons/EventsSkeleton";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 import { getEvents, updateLikeCount } from "@/lib/actions/database.action";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function Events() {
+  const [currentUser, setCurrentUser] = useState<any>();
   const [events, setEvents] = useState<any[]>();
   const [filteredEvents, setFilteredEvents] = useState<any[]>();
+  const isMounted = useRef<boolean | null>(false);
   const [loading, setLoading] = useState(true); // Loading state
   const { query } = SearchQuery();
   const [searchTriggered, setSearchTriggered] = useState(true); // New state to track search vs like
   const { selectedValue } = CategoryQuery();
 
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    } // This is just a simple trick, that allows the useEffect to skip the First Render.
     const fetchEvents = async () => {
       try {
         setLoading(true);
@@ -29,7 +35,13 @@ export function Events() {
       }
     };
 
+    const fetchUser = async () => {
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+    };
+
     fetchEvents();
+    fetchUser();
   }, []);
 
   useEffect(() => {
@@ -78,32 +90,49 @@ export function Events() {
     return () => clearTimeout(debounce);
   }, [query, events, selectedValue]);
 
-  const handleLike = async (eventId: string) => {
-    setSearchTriggered(false);
+  const handleLike = useCallback(
+    async (eventId: string) => {
+      setSearchTriggered(false);
 
-    // Get the current user
-    const user = await getCurrentUser();
-    const { $id: userId } = user;
+      // Get the current user
+      const user = await getCurrentUser();
+      const { $id: userId } = user;
 
-    const event = events?.find((event) => event.$id === eventId);
-    if (event?.likedEvents?.includes(userId)) {
-      alert("You have already liked this event");
-      return; // Exit if the user has already liked the event
-    }
+      const event = events?.find((event) => event.$id === eventId);
+      if (event?.likedEvents?.includes(userId)) {
+        alert("You have already liked this event");
+        return; // Exit if the user has already liked the event
+      }
 
-    // Update the local state immediately for a responsive UI
-    setEvents((prevEvents) =>
-      prevEvents!.map((event) =>
-        event.$id === eventId
-          ? { ...event, likedEvents: [...event.likedEvents, userId] }
-          : event
-      )
-    );
+      // Update the local state immediately for a responsive UI
+      setEvents((prevEvents) =>
+        prevEvents!.map((event) =>
+          event.$id === eventId
+            ? { ...event, likedEvents: [...event.likedEvents, userId] }
+            : event
+        )
+      );
 
-    try {
-      const response = await updateLikeCount(eventId);
-      if (!response?.success) {
-        // Revert the like if the update fails
+      try {
+        const response = await updateLikeCount(eventId);
+        if (!response?.success) {
+          // Revert the like if the update fails
+          setEvents((prevEvents) =>
+            prevEvents!.map((event) =>
+              event.$id === eventId
+                ? {
+                    ...event,
+                    likedEvents: event.likedEvents.filter(
+                      (id: any) => id !== userId
+                    ),
+                  }
+                : event
+            )
+          );
+        }
+      } catch (error: any) {
+        console.log(`Error: ${error.message}`);
+        // Revert the like if there's an error
         setEvents((prevEvents) =>
           prevEvents!.map((event) =>
             event.$id === eventId
@@ -116,26 +145,12 @@ export function Events() {
               : event
           )
         );
+      } finally {
+        setSearchTriggered(true);
       }
-    } catch (error: any) {
-      console.log(`Error: ${error.message}`);
-      // Revert the like if there's an error
-      setEvents((prevEvents) =>
-        prevEvents!.map((event) =>
-          event.$id === eventId
-            ? {
-                ...event,
-                likedEvents: event.likedEvents.filter(
-                  (id: any) => id !== userId
-                ),
-              }
-            : event
-        )
-      );
-    } finally {
-      setSearchTriggered(true);
-    }
-  };
+    },
+    [currentUser, events]
+  );
 
   if (loading) return <EventsFallback />; // Show fallback Ui Skeleton while loading
 
@@ -146,7 +161,11 @@ export function Events() {
         <div className="px-5 grid lg:grid-cols-3 gap-2 md:gap-4 lg:gap-8 md:grid-cols-2 grid-cols-1">
           {filteredEvents?.map((event, index) => (
             <div key={index}>
-              <EventsCard event={event} onLike={handleLike} />
+              <EventsCard
+                event={event}
+                onLike={handleLike}
+                hasLiked={event.likedEvents.includes(currentUser?.$id)}
+              />
             </div>
           ))}
         </div>
