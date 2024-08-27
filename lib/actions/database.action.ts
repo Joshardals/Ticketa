@@ -58,7 +58,7 @@ export async function getEvents() {
     const data = await databases.listDocuments(
       APPWRITE_DATABASE_ID as string,
       APPWRITE_EVENTS_ID as string,
-      []
+      [Query.orderDesc("")]
     );
 
     return { success: true, data: data.documents };

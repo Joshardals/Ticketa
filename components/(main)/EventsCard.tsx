@@ -5,10 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 export function EventsCard({ event }: { event: any }) {
+  const isPastEvent = new Date(event.date) < new Date();
   return (
     <div
       key={event.$id}
-      className=" bg-paleYellow rounded-lg p-2 shadow-lg text-pretty h-full"
+      className={`bg-paleYellow rounded-lg p-2 shadow-lg text-pretty h-full ${
+        isPastEvent ? "opacity-70" : ""
+      }`}
     >
       <Image
         src={event.imgUrl}
@@ -25,14 +28,15 @@ export function EventsCard({ event }: { event: any }) {
       <div className="flex items-center jusify-center space-x-2 text-xs mt-2">
         <FaRegUser />
         <p className=" font-bold">
-          People Attending: {event.attendanceCount.length}
+          {isPastEvent ? "Was Attended By" : "People Attending"}:{" "}
+          {event.attendanceCount.length}
         </p>
       </div>
       <Link
         href={`/events/${event.eventId}`}
         className="text-emeraldGreen mt-4 inline-block"
       >
-        View Details
+        {isPastEvent ? "View Event Details" : "View Details"}
       </Link>
     </div>
   );

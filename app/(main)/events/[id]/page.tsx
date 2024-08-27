@@ -12,7 +12,9 @@ export default async function EventPage({
 }) {
   const { data } = await getEventsById(id);
   if (!data) return null;
-  console.log(data);
+
+  const isPastEvent = new Date(data.date) < new Date();
+
   return (
     <div className="maxCenter">
       <div className="px-5">
@@ -45,10 +47,11 @@ export default async function EventPage({
           <div className="flex items-center jusify-center space-x-2">
             <FaRegUser />
             <p className="font-bold">
-              People Attending: <b>{data.attendanceCount.length}</b>
+              {isPastEvent ? "Was Attended By" : "People Attending"}:{" "}
+              <b>{data.attendanceCount.length}</b>
             </p>
           </div>
-          <Button variant={"ticket"}>Buy Tickets</Button>
+          {!isPastEvent && <Button variant={"ticket"}>Buy Tickets</Button>}
         </div>
       </div>
     </div>
