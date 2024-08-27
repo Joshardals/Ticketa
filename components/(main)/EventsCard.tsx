@@ -40,9 +40,9 @@ export function EventsCard({ event }: { event: any }) {
 
       <div className="mt-2 flex items-center space-x-1">
         <button title="Like Button" onClick={handleLike}>
-          <IoIosHeartEmpty className="text-deepRed" />
+          <IoIosHeart className="text-deepRed" />
         </button>
-        <p>{event.likesCount}</p>
+        <p className="text-xs">{event.likesCount}</p>
       </div>
 
       <Link

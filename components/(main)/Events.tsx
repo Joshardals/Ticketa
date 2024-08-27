@@ -91,14 +91,15 @@ export function Events() {
           No events found{" "}
           {query && (
             <>
-              for "<span className="text-deepRed">{query}</span>"
+              for &quot;<span className="text-deepRed">{query}</span>&quot;
             </>
           )}
           {selectedValue && (
             <>
               {" "}
-              in the "<span className="text-emeraldGreen">{selectedValue}</span>
-              " category
+              in the &quot;
+              <span className="text-emeraldGreen">{selectedValue}</span>
+              &quot; category
             </>
           )}
         </p>
