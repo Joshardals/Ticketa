@@ -3,6 +3,7 @@ import { formatDate, formatPrice } from "@/lib/utils";
 import { getEventsById } from "@/lib/actions/database.action";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { FaRegUser } from "react-icons/fa6";
 
 export default async function EventPage({
   params: { id },
@@ -40,6 +41,13 @@ export default async function EventPage({
           <p>
             Price: <b>{formatPrice(data.price)}</b>
           </p>
+
+          <div className="flex items-center jusify-center space-x-2">
+            <FaRegUser />
+            <p className="font-bold">
+              People Attending: <b>{data.attendanceCount.length}</b>
+            </p>
+          </div>
           <Button variant={"ticket"}>Buy Tickets</Button>
         </div>
       </div>

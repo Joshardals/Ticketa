@@ -1,22 +1,14 @@
 "use client";
+import { FaRegUser } from "react-icons/fa";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
-import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import Link from "next/link";
 
-export function EventsCard({
-  event,
-  onLike,
-  hasLiked,
-}: {
-  event: any;
-  onLike: (eventId: string) => void;
-  hasLiked: boolean;
-}) {
+export function EventsCard({ event }: { event: any }) {
   return (
     <div
       key={event.$id}
-      className=" bg-paleYellow rounded-lg p-2 shadow-lg text-pretty"
+      className=" bg-paleYellow rounded-lg p-2 shadow-lg text-pretty h-full"
     >
       <Image
         src={event.imgUrl}
@@ -30,18 +22,12 @@ export function EventsCard({
         {formatDate(event.date)} | {event.location}
       </p>
       <p className="text-coolGray text-xs mt-2">{event.description}</p>
-
-      <div className="mt-2 flex items-center space-x-1">
-        <button title="Like Button" onClick={() => onLike(event.$id)}>
-          {hasLiked ? (
-            <IoIosHeart className="text-deepRed" />
-          ) : (
-            <IoIosHeartEmpty className="text-deepRed" />
-          )}
-        </button>
-        <p className="text-xs">{event.likedEvents.length}</p>
+      <div className="flex items-center jusify-center space-x-2 text-xs mt-2">
+        <FaRegUser />
+        <p className=" font-bold">
+          People Attending: {event.attendanceCount.length}
+        </p>
       </div>
-
       <Link
         href={`/events/${event.eventId}`}
         className="text-emeraldGreen mt-4 inline-block"
