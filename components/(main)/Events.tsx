@@ -10,17 +10,12 @@ export function Events() {
   const [currentUser, setCurrentUser] = useState<any>();
   const [events, setEvents] = useState<any[]>();
   const [filteredEvents, setFilteredEvents] = useState<any[]>();
-  const isMounted = useRef<boolean | null>(false);
   const [loading, setLoading] = useState(true); // Loading state
   const { query } = SearchQuery();
   const [searchTriggered, setSearchTriggered] = useState(true); // New state to track search vs like
   const { selectedValue } = CategoryQuery();
 
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      return;
-    } // This is just a simple trick, that allows the useEffect to skip the First Render.
     const fetchEvents = async () => {
       try {
         setLoading(true);
