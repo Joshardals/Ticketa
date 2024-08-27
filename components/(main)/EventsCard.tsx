@@ -1,25 +1,32 @@
 "use client";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import Link from "next/link";
-import { updateEventsById } from "@/lib/actions/database.action";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export function EventsCard({ event }: { event: any }) {
-  const router = useRouter();
-  const handleLike = async (e: any) => {
-    e.preventDefault();
+export function EventsCard({
+  event,
+  onLike,
+}: {
+  event: any;
+  onLike: (eventId: string) => void;
+}) {
+  const [hasLiked, setHasLiked] = useState<boolean | null>(null);
+  useEffect(() => {
+    const HasLiked = async () => {
+      // Get the current user
+      const user = await getCurrentUser();
+      const { $id: userId } = user;
 
-    try {
-      const response = await updateEventsById(event.$id);
-      if (response?.success) {
-        router.refresh();
-      }
-    } catch (error: any) {
-      console.log(`Error: ${error.message}`);
-    }
-  };
+      if (event.likedEvents.includes(userId)) {
+        setHasLiked(true);
+      } else setHasLiked(false);
+    };
+
+    HasLiked();
+  }, []);
   return (
     <div
       key={event.$id}
@@ -39,10 +46,14 @@ export function EventsCard({ event }: { event: any }) {
       <p className="text-coolGray text-xs mt-2">{event.description}</p>
 
       <div className="mt-2 flex items-center space-x-1">
-        <button title="Like Button" onClick={handleLike}>
-          <IoIosHeart className="text-deepRed" />
+        <button title="Like Button" onClick={() => onLike(event.$id)}>
+          {hasLiked ? (
+            <IoIosHeart className="text-deepRed" />
+          ) : (
+            <IoIosHeartEmpty className="text-deepRed" />
+          )}
         </button>
-        <p className="text-xs">{event.likesCount}</p>
+        <p className="text-xs">{event.likedEvents.length}</p>
       </div>
 
       <Link

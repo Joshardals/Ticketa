@@ -1,4 +1,9 @@
-import { CategoryState, SearchQueryState, UserActionState } from "@/typings";
+import {
+  CategoryState,
+  HasLikedState,
+  SearchQueryState,
+  UserActionState,
+} from "@/typings";
 import { create } from "zustand";
 
 export const CategoryQuery = create<CategoryState>((set) => ({
@@ -14,4 +19,9 @@ export const SearchQuery = create<SearchQueryState>((set) => ({
 export const UserActionToggle = create<UserActionState>((set) => ({
   open: null,
   setOpen: (open) => set(() => ({ open })),
+}));
+
+export const HasLiked = create<HasLikedState>((set) => ({
+  liked: null,
+  setLiked: (liked) => set(() => ({ liked })),
 }));

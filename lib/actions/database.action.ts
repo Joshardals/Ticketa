@@ -89,8 +89,11 @@ export async function getEventsById(id: string) {
 }
 
 // Update Event By Id.
-export async function updateEventsById(eventId: string) {
+export async function updateLikeCount(eventId: string) {
   try {
+    const user = await getCurrentUser();
+    const { $id: userId } = user;
+
     // Fetch the current document to get the current likesCount
     const eventDoc = await databases.getDocument(
       APPWRITE_DATABASE_ID as string,
@@ -98,20 +101,19 @@ export async function updateEventsById(eventId: string) {
       eventId
     );
 
-    // Increment the like count
-    const newLikesCount = eventDoc.likesCount + 1;
+    // So Basically I am just updating the LikedEvents Array with user Ids, that is the id of the
+    // current logged in user, if they like the events...
 
-    // Update the Document with the new Likes Count
-    await databases.updateDocument(
+    const data = await databases.updateDocument(
       APPWRITE_DATABASE_ID as string,
       APPWRITE_EVENTS_ID as string,
       eventId,
       {
-        likesCount: newLikesCount,
+        likedEvents: [...eventDoc.likedEvents, userId],
       }
     );
-    revalidatePath("/events");
-    return { success: true, data: newLikesCount };
+
+    return { success: true, data: data.documents };
   } catch (error: any) {
     console.error("Error updating likes count:", error);
   }
