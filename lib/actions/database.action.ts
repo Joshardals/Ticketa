@@ -3,6 +3,7 @@ import { UserInfoParams } from "@/typings/database";
 import { databases } from "../appwrite.config";
 import { getCurrentUser } from "./auth.action";
 import { ID, Query } from "node-appwrite";
+import { revalidatePath } from "next/cache";
 
 const { APPWRITE_DATABASE_ID, APPWRITE_USERS_ID, APPWRITE_EVENTS_ID } =
   process.env;
@@ -51,7 +52,7 @@ export async function getCurrentUserInfo() {
   }
 }
 
-// trying to get all Events
+// Trying to get all Events
 export async function getEvents() {
   try {
     const data = await databases.listDocuments(
@@ -84,5 +85,34 @@ export async function getEventsById(id: string) {
       `Failed to fetch Events Document from the DB: ${error.message}`
     );
     return { success: false, msg: error.message };
+  }
+}
+
+// Update Event By Id.
+export async function updateEventsById(eventId: string) {
+  try {
+    // Fetch the current document to get the current likesCount
+    const eventDoc = await databases.getDocument(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_EVENTS_ID as string,
+      eventId
+    );
+
+    // Increment the like count
+    const newLikesCount = eventDoc.likesCount + 1;
+
+    // Update the Document with the new Likes Count
+    await databases.updateDocument(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_EVENTS_ID as string,
+      eventId,
+      {
+        likesCount: newLikesCount,
+      }
+    );
+    revalidatePath("/events");
+    return { success: true, data: newLikesCount };
+  } catch (error: any) {
+    console.error("Error updating likes count:", error);
   }
 }

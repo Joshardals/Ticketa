@@ -1,3 +1,15 @@
+// Typings for the Search Query
+export interface SearchQueryState {
+  query: string;
+  setQuery: (query: SearchQueryState["query"]) => void;
+}
+
+// Typings for the Category
+export interface CategoryState {
+  selectedValue: string;
+  setSelectedValue: (selectedValue: CategoryState["selectedValue"]) => void;
+}
+
 // Typings for the sidebar for mobile devices in Dashboard
 export interface UserActionState {
   open: boolean | null;

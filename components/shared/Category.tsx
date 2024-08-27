@@ -1,5 +1,6 @@
 "use client";
 import { BiCategoryAlt } from "react-icons/bi";
+import { CategoryQuery } from "@/lib/store";
 import {
   Select,
   SelectContent,
@@ -13,7 +14,7 @@ import { useEffect, useState } from "react";
 
 export function Category() {
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
+  const { setSelectedValue } = CategoryQuery();
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +33,6 @@ export function Category() {
 
   const handleValueChange = (value: string) => {
     setSelectedValue(value);
-    alert(`Selected Value: ${value}`);
   };
   return (
     <Select onValueChange={handleValueChange}>

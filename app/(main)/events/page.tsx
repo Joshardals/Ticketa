@@ -2,6 +2,7 @@ import { Category } from "@/components/shared/Category";
 import { Events } from "@/components/(main)/Events";
 import EventsHeader from "@/components/(main)/EventsHeader";
 import { SearchBar } from "@/components/shared/SearchBar";
+import { Suspense } from "react";
 
 export default function Eventspage() {
   return (
