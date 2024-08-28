@@ -4,6 +4,8 @@ import { getEventsById } from "@/lib/actions/database.action";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaRegUser } from "react-icons/fa6";
+import { ButtonInput } from "@/components/form/FormInput";
+import Link from "next/link";
 
 export default async function EventPage({
   params: { id },
@@ -51,7 +53,13 @@ export default async function EventPage({
               <b>{data.attendanceCount.length}</b>
             </p>
           </div>
-          {!isPastEvent && <Button variant={"ticket"}>Buy Tickets</Button>}
+          {!isPastEvent && (
+            <div>
+              <Link href={`/events/${id}/checkout`}>
+                <ButtonInput label="Buy Ticket" variant="ticket" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

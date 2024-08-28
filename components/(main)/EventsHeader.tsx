@@ -7,6 +7,9 @@ export default function EventsHeader() {
   const router = useRouter();
 
   const isEventDetailPage = pathname.startsWith("/events/");
+  const isCheckoutPage = pathname.includes("/checkout");
+
+  console.log(isCheckoutPage);
   return (
     <div
       className="flex items-center space-x-1 cursor-pointer py-5"

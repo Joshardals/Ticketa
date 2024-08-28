@@ -2,19 +2,24 @@
 import { CategoryQuery, SearchQuery } from "@/lib/store";
 import { EventsCard } from "./EventsCard";
 import EventsFallback from "@/components/ui/skeletons/EventsSkeleton";
-import { getCurrentUser } from "@/lib/actions/auth.action";
 import { getEvents } from "@/lib/actions/database.action";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function Events() {
-  const [currentUser, setCurrentUser] = useState<any>();
   const [events, setEvents] = useState<any[]>();
+  const isInitialMount = useRef(true);
   const [filteredEvents, setFilteredEvents] = useState<any[]>();
   const [loading, setLoading] = useState(true); // Loading state
   const { query } = SearchQuery();
   const { selectedValue } = CategoryQuery();
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      // Skip the first render
+      isInitialMount.current = false;
+      return;
+    }
+
     const fetchEvents = async () => {
       try {
         setLoading(true);

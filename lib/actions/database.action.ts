@@ -8,6 +8,12 @@ import { revalidatePath } from "next/cache";
 const { APPWRITE_DATABASE_ID, APPWRITE_USERS_ID, APPWRITE_EVENTS_ID } =
   process.env;
 
+interface ExportType {
+  success: boolean;
+  data?: any;
+  msg?: any;
+}
+
 // Creating User Info Document in the DB
 export async function createUserInfo(data: UserInfoParams) {
   try {
@@ -32,7 +38,7 @@ export async function createUserInfo(data: UserInfoParams) {
 }
 
 // Trying to get the current logged in user info.
-export async function getCurrentUserInfo() {
+export async function getCurrentUserInfo(): Promise<ExportType> {
   try {
     const user = await getCurrentUser();
     const { $id: userId } = user;
@@ -71,7 +77,7 @@ export async function getEvents() {
 }
 
 // Trying to get Events By Id.
-export async function getEventsById(id: string) {
+export async function getEventsById(id: string): Promise<ExportType> {
   try {
     const data = await databases.listDocuments(
       APPWRITE_DATABASE_ID as string,
