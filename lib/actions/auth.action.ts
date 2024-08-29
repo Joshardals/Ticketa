@@ -59,7 +59,6 @@ export async function signupUser(data: AuthValidationType) {
       username: data.username!,
       email,
       name: data.fullname!,
-      gender: data.gender!,
     }); // This partuclar createUserInfo function is just to create User Documents in the Database.
 
     return { success: true };

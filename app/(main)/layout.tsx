@@ -1,5 +1,4 @@
-// import { getCurrentUser } from "@/lib/actions/auth/auth.actions";
-import { MainHeader } from "@/components/shared/MainHeader";
+import { getCurrentUser } from "@/lib/actions/auth.action";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -14,8 +13,8 @@ export default async function HomeLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  //   const user = await getCurrentUser();
-  //   if (!user) redirect("/");
+  const user = await getCurrentUser();
+  if (!user) redirect("/");
 
   return (
     <main>

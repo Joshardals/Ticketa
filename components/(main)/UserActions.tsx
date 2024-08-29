@@ -12,13 +12,7 @@ import { navLinks } from "@/lib/data";
 import Link from "next/link";
 import { useState } from "react";
 
-export function UserActions({
-  bgColor,
-  initials,
-}: {
-  bgColor: string;
-  initials: string;
-}) {
+export function UserActions({ initials }: { initials: string }) {
   const [loading, setLoading] = useState<boolean | null>(false);
   const handleLogout = async () => {
     try {
@@ -34,8 +28,7 @@ export function UserActions({
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full max-sm:w-full flex justify-end">
         <div
-          className={`cursor-pointer transition-all duration-100 ease-linear border-0 hover:border-2 hover:border-sunsetOrange rounded-full size-10 text-softWhite flex items-center justify-center `}
-          style={{ background: bgColor }}
+          className={`cursor-pointer transition-all duration-100 ease-linear bg-emeraldGreen border-0 hover:border-2 hover:border-sunsetOrange rounded-full size-10 text-softWhite flex items-center justify-center `}
         >
           {initials}
         </div>

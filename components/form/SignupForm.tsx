@@ -25,7 +25,6 @@ export function SignupForm() {
       fullname: "",
       username: "",
       email: "",
-      gender: "",
       password: "",
       confirmPassword: "",
     },
@@ -40,7 +39,6 @@ export function SignupForm() {
         fullname: values.fullname,
         username: values.username,
         email: values.email,
-        gender: values.gender,
         password: values.password,
       });
 
@@ -50,6 +48,7 @@ export function SignupForm() {
       }
 
       alert("User created successfully");
+      router.push("/home");
     } catch (error: any) {
       console.log(`Error signing up: ${error.message}`);
       setError("An unexpected error occurred. Please try again.");
@@ -86,8 +85,6 @@ export function SignupForm() {
           placeholder="Email"
           loading={loading}
         />
-
-        <SelectInput form={form} name="gender" />
 
         <FormInput
           form={form}

@@ -5,7 +5,7 @@ import { getCurrentUserTicket } from "@/lib/actions/database.action";
 
 export default async function TicketsPage() {
   const { data } = await getCurrentUserTicket();
-  console.log(data);
+
   return (
     <div className="maxCenter max-sm:px-5">
       <div className="flex items-center justify-between">

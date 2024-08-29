@@ -47,11 +47,3 @@ export function formatPrice(price: number): string {
 export function formatSubCurrency(price: number): number {
   return Math.round(price * 100);
 }
-
-export function getColorForId(id: string) {
-  const hash = id
-    .split("")
-    .reduce((acc: any, char: any) => acc + char.charCodeAt(0), 0);
-  const colorIndex = hash % darkColors.length;
-  return darkColors[colorIndex];
-}

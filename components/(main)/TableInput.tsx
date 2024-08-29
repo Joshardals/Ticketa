@@ -39,14 +39,12 @@ export function TableInput(data: TableProps) {
         {data.tickets?.map((ticket, index) => (
           <TableRow key={index} className="hover:bg-onyx/10">
             <TableCell>{ticket.ticketId}</TableCell>
-            <TableCell>{ticket.title}</TableCell>
+            <TableCell>{ticket.eventName}</TableCell>
             <TableCell>{ticket.status}</TableCell>
             <TableCell className="w-[fit-content]">
               {formatDate(ticket.purchaseDate)}
             </TableCell>
-            <TableCell className="text-right">
-              {formatPrice(ticket.price)}
-            </TableCell>
+            <TableCell className="">{formatPrice(ticket.price)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

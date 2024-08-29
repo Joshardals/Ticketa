@@ -27,7 +27,6 @@ export async function createUserInfo(data: UserInfoParams) {
       ID.unique(),
       {
         userId: data.userId,
-        gender: data.gender,
         email: data.email,
         name: data.name,
         username: data.username,
