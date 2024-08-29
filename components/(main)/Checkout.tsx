@@ -55,7 +55,7 @@ export function Checkout({ amount, event }: { amount: number; event: any }) {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${BASE_URL}payment-success?amount=${amount}&event_name=${event.title}`,
+          return_url: `${BASE_URL}/events/payment-success?amount=${amount}&event_name=${event.title}`,
         },
       });
 
