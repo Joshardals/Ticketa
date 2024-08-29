@@ -35,9 +35,10 @@ export default function SuccessPage() {
 
   //   completeTicketProcessing();
   // }, [amount, eventName]);
+
   return (
     <div className="flex items-center justify-center min-h-screen flex-col space-y-4 max-w-[50rem] mx-auto text-center p-5">
-      <FaRegCircleCheck className="text-emeraldGreen size-10" />
+      {/* <FaRegCircleCheck className="text-emeraldGreen size-10" />
       <p className="font-semibold text-pretty">
         Payment Successful! 🎉 Thank you for your purchase. You have
         successfully bought a ticket to <br /> <b>{eventName}</b> for{" "}
@@ -46,7 +47,7 @@ export default function SuccessPage() {
       </p>
       <Link href="/events">
         <ButtonInput variant="ticket" label="Back to Events" />
-      </Link>
+      </Link> */}
     </div>
   );
 }
