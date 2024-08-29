@@ -1,4 +1,11 @@
 import { SignupForm } from "@/components/form/SignupForm";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up | Ticketa",
+  description:
+    "Create your Ticketa account and start exploring student events—sign up now to browse, buy, and manage your tickets effortlessly.",
+};
 
 export default function SignupPage() {
   return (
