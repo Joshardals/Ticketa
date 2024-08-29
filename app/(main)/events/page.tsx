@@ -4,7 +4,6 @@ import EventsHeader from "@/components/(main)/EventsHeader";
 import { Metadata } from "next";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { UserProfile } from "@/components/shared/UserProfile";
-import { getEvents } from "@/lib/actions/database.action";
 
 export const metadata: Metadata = {
   title: "Events | Ticketa",
@@ -13,9 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Eventspage() {
-  const { data } = await getEvents();
-  console.log(data);
-  if (!data) return null;
   return (
     <div className="maxCenter">
       <div className="flex justify-between items-center max-sm:px-5">
@@ -39,10 +35,6 @@ export default async function Eventspage() {
       </div>
 
       <Events />
-
-      {data.map((item, index) => (
-        <p key={index}>{item.title}</p>
-      ))}
     </div>
   );
 }
