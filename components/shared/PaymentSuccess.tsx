@@ -14,5 +14,9 @@ export function PaymentSuccess() {
   const searchParams = useSearchParams();
   const amount = searchParams.get("amount");
   const eventName = searchParams.get("event_name");
+
+  if (!amount || !eventName) {
+    return <div>Invalid payment details.</div>;
+  }
   return <div>PaymentSuccess</div>;
 }
