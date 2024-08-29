@@ -5,16 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const darkColors = [
-  "#1D3557", // Navy Blue
-  "#2A9D8F", // Emerald Green
-  "#6D6875", // Cool Gray
-  "#333333", // Dark Charcoal
-  "#264653", // Dark Teal
-  "#14213D", // Deep Navy
-  "#3A3A3A", // Charcoal Gray
-  "#383838", // Slate Gray
-];
+export const BASE_URL = "https://ticketa-sigma.vercel.app/";
+// export const BASE_URL = "http://localhost:3000/";
 
 export function formatDate(isoString: string): string {
   // Parse the date string without timezone adjustments
@@ -27,8 +19,6 @@ export function formatDate(isoString: string): string {
 
   let hours = date.getUTCHours();
   const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-  const seconds = String(date.getUTCSeconds()).padStart(2, "0");
-  const milliseconds = String(date.getUTCMilliseconds()).padStart(3, "0");
 
   const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time

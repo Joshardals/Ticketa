@@ -4,7 +4,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { formatPrice, formatSubCurrency } from "@/lib/utils";
+import { BASE_URL, formatPrice, formatSubCurrency } from "@/lib/utils";
 import { ButtonInput } from "../form/FormInput";
 import { updateEventsById } from "@/lib/actions/database.action";
 import Link from "next/link";
@@ -55,7 +55,7 @@ export function Checkout({ amount, event }: { amount: number; event: any }) {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `http://localhost:3000/payment-success?amount=${amount}&event_name=${event.title}`,
+          return_url: `${BASE_URL}payment-success?amount=${amount}&event_name=${event.title}`,
         },
       });
 
