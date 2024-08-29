@@ -38,9 +38,8 @@ export function TableInput(data: TableProps) {
           })}
         </TableRow>
       </TableHeader>
-
-      {data.tickets?.map((ticket, index) => (
-        <TableBody>
+      <TableBody>
+        {data.tickets?.map((ticket, index) => (
           <TableRow key={index} className="hover:bg-onyx/10">
             <TableCell>{ticket.ticketId}</TableCell>
             <TableCell>{ticket.eventName}</TableCell>
@@ -50,8 +49,8 @@ export function TableInput(data: TableProps) {
             </TableCell>
             <TableCell className="">{formatPrice(ticket.price)}</TableCell>
           </TableRow>
-        </TableBody>
-      ))}
+        ))}
+      </TableBody>
     </Table>
   );
 }
