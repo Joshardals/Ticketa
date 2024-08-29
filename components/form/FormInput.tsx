@@ -29,13 +29,19 @@ interface FormInputProps {
   // Button Typings.
   label?: string;
   variant?: any;
+  disabled?: boolean;
 }
 
-export function ButtonInput({ loading, label, variant }: FormInputProps) {
+export function ButtonInput({
+  loading,
+  label,
+  variant,
+  disabled,
+}: FormInputProps) {
   return (
     <Button
       variant={variant || "ticketa"}
-      disabled={loading}
+      disabled={loading || disabled}
       className="w-full"
     >
       {loading ? <FaSpinner className=" animate-spin" /> : label}

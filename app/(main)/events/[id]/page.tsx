@@ -1,6 +1,6 @@
 import EventsHeader from "@/components/(main)/EventsHeader";
 import { formatDate, formatPrice } from "@/lib/utils";
-import { getEventsById } from "@/lib/actions/database.action";
+import { checkIfHasTicket, getEventsById } from "@/lib/actions/database.action";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaRegUser } from "react-icons/fa6";
@@ -13,6 +13,7 @@ export default async function EventPage({
   params: { id: string };
 }) {
   const { data } = await getEventsById(id);
+  const hasTicket = (await checkIfHasTicket(id)).msg;
   if (!data) return null;
 
   const isPastEvent = new Date(data.date) < new Date();
@@ -53,13 +54,22 @@ export default async function EventPage({
               <b>{data.attendanceCount.length}</b>
             </p>
           </div>
-          {!isPastEvent && (
-            <div>
-              <Link href={`/events/${id}/checkout`}>
-                <ButtonInput label="Buy Ticket" variant="ticket" />
-              </Link>
-            </div>
-          )}
+          {!isPastEvent &&
+            (!hasTicket ? (
+              <div>
+                <Link href={`/events/${id}/checkout`}>
+                  <ButtonInput label="Buy Ticket" variant="ticket" />
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <ButtonInput
+                  label="Ticket Purchased"
+                  variant="ticket"
+                  disabled={hasTicket}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>

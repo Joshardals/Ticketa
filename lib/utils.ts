@@ -39,8 +39,17 @@ export function formatDate(isoString: string): string {
 
 // You don't need to know what the code above does, it is basically just formatting the date properly. (Dont't waste your time trying to understnad it.)
 
+// export function formatPrice(price: number): string {
+//   return `₦${price.toLocaleString("en-NG", { minimumFractionDigits: 0 })}`;
+// }
+
 export function formatPrice(price: number): string {
-  return `₦${price.toLocaleString("en-NG", { minimumFractionDigits: 0 })}`;
+  return `$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+}
+
+// a tiny utility function that converts a price in dollars (or any other currency) to its subunit in cents
+export function formatSubCurrency(price: number): number {
+  return Math.round(price * 100);
 }
 
 export function getColorForId(id: string) {

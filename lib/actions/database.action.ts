@@ -93,3 +93,70 @@ export async function getEventsById(id: string): Promise<ExportType> {
     return { success: false, msg: error.message };
   }
 }
+
+// Trying to Update an event by its id.
+export async function updateEventsById(id: string) {
+  try {
+    // Fetch the event document by ID
+    const event = await getEventsById(id);
+
+    // Fetch the Current Logged In User
+    const user = await getCurrentUser();
+    const { $id: userId } = user;
+
+    // // If event doesn't exist, return an error
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // // Get the current attendanceCount array or initialize if not existing
+    const attendanceCount = event.data.attendanceCount || [];
+
+    // // Add the user ID to the attendanceCount array if not already added
+    if (!attendanceCount.includes(userId)) {
+      attendanceCount.push(userId);
+    }
+
+    // Update the event document with the new attendanceCount
+    const updatedEvent = await databases.updateDocument(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_EVENTS_ID as string,
+      event.data.$id,
+      {
+        attendanceCount, // Set the updated array
+      }
+    );
+
+    // Return success with the updated event document
+    revalidatePath("/(main)/events/[id]", "page");
+    return { success: true, data: updatedEvent };
+  } catch (error: any) {
+    console.error(`Failed to update Events Document: ${error.message}`);
+    return { success: false, msg: error.message };
+  }
+}
+
+// A server action to check whether a user has already purchased a ticket before, to avoid purchasing multiple tickets with the same account.
+export async function checkIfHasTicket(id: string) {
+  try {
+    // Fetch the event document by ID
+    const event = await getEventsById(id);
+
+    // Fetch the Current Logged In User
+    const user = await getCurrentUser();
+    const { $id: userId } = user;
+
+    // // Get the current attendanceCount array or initialize if not existing
+    const attendanceCount = event.data.attendanceCount || [];
+
+    // Checking if the attendance count includes the current user id.
+    if (attendanceCount.includes(userId)) {
+      return { success: true, msg: true };
+    } else {
+      return { success: true, msg: false };
+    }
+  } catch (error: any) {
+    console.error(`Failed to check if user has tickets: ${error.message}`);
+    return { success: false, msg: error.message };
+  }
+}

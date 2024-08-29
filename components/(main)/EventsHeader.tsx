@@ -9,14 +9,21 @@ export default function EventsHeader() {
   const isEventDetailPage = pathname.startsWith("/events/");
   const isCheckoutPage = pathname.includes("/checkout");
 
-  console.log(isCheckoutPage);
   return (
     <div
       className="flex items-center space-x-1 cursor-pointer py-5"
-      onClick={() => router.back()}
+      onClick={() => {
+        if (isEventDetailPage) {
+          router.push("/events");
+        } else {
+          router.push("/home");
+        }
+      }}
     >
       <IoMdArrowRoundBack />
-      <span>{isEventDetailPage ? "Go to Events" : "Home"}</span>
+      <span>
+        {isEventDetailPage ? "Go to Events" : isCheckoutPage ? "Back" : "Home"}
+      </span>
     </div>
   );
 }

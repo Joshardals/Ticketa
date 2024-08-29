@@ -1,99 +1,96 @@
+import { useEffect, useState } from "react";
 import {
-  getCurrentUserInfo,
-  getEventsById,
-} from "@/lib/actions/database.action";
-import { formatDate, formatPrice } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+  PaymentElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
+import { formatPrice, formatSubCurrency } from "@/lib/utils";
+import { ButtonInput } from "../form/FormInput";
+import { updateEventsById } from "@/lib/actions/database.action";
 
-interface UserEventModel {
-  eventId: string;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  category: string;
-  price: number;
-  attendanceCount: number;
-  imgUrl: string;
+export function Checkout({ amount, event }: { amount: number; event: any }) {
+  const stripe = useStripe();
+  const elements = useElements();
 
-  // User Info Typings
-  name: string;
-  email: string;
-}
-
-export function Checkout({ eventId }: { eventId: any }) {
-  const isInitialMount = useRef(true);
-  const [event, setEvent] = useState<UserEventModel | null>();
-  const [userInfo, setUserInfo] = useState<UserEventModel | null>();
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      // Skip the first render
-      isInitialMount.current = false;
+    fetch("/api/create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "applications/json",
+      },
+      body: JSON.stringify({ amount: formatSubCurrency(amount) }),
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, [amount]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!stripe || !elements) {
       return;
     }
 
-    const fetchEventDetailsAndUserInfo = async () => {
-      try {
-        setLoading(true);
-        const response = await getEventsById(eventId);
+    try {
+      localStorage.setItem("event_id", event.eventId);
 
-        const user = await getCurrentUserInfo();
+      const { error: submitError } = await elements.submit();
 
-        if (!response) return null;
-        if (!user) return null;
-
-        setUserInfo(user.data);
-        console.log(user.data);
-
-        console.log(response);
-        setEvent(response.data);
-      } catch (error: any) {
-        console.log(`Error: ${error.message}`);
-      } finally {
+      if (submitError) {
+        setErrorMessage(submitError.message);
         setLoading(false);
+        return;
       }
-    };
 
-    fetchEventDetailsAndUserInfo();
-  }, []);
+      console.log("Payment submitted successfully, confirming payment...");
 
-  if (loading) return "Loading...";
-  if (!event) return null;
-  if (!userInfo) return null;
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `http://localhost:3000/payment-success?amount=${amount}&event_name=${event.title}`,
+        },
+      });
+
+      if (error) {
+        console.error("Payment Error:", error.message);
+        setErrorMessage(error.message);
+      } else {
+        console.log("Payment confirmed successfully!");
+      }
+    } catch (error: any) {
+      console.error("Unexpected error during payment:", error.message);
+      setErrorMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      <div className="maxCenter p-5 space-y-4">
-        <h2 className="text-2xl font-extrabold">Checkout</h2>
+    <form onSubmit={handleSubmit} className="p-5">
+      {clientSecret ? (
+        <>
+          <PaymentElement />
+          <div className="mt-4">
+            <ButtonInput
+              label={`Pay ${formatPrice(amount)}`}
+              loading={loading}
+              variant={"ticket"}
+            />
+          </div>
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
 
-        <div className="event-details bg-light rounded-lg">
-          <h2 className="text-xl font-semibold">Event Details</h2>
-          <p>
-            <strong>Title:</strong> {event.title}
-          </p>
-          <p>
-            <strong>Date:</strong> {formatDate(event.date)}
-          </p>
-          <p>
-            <strong>Location:</strong> {event.location}
-          </p>
-          <p>
-            <strong>Price:</strong> {formatPrice(event.price)}
-          </p>
-        </div>
-
-        <div className="bg-light rounded-lg mb-4">
-          <h2 className="text-xl font-semibold">Your Information</h2>
-          <p>
-            <strong>Name:</strong> {userInfo.name}
-          </p>
-          <p>
-            <strong>Email:</strong> {userInfo.email}
-          </p>
-        </div>
-      </div>
-    </div>
+      {errorMessage && (
+        <div className="text-center text-deepRed text-sm">{errorMessage}</div>
+      )}
+    </form>
   );
 }

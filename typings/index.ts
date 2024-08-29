@@ -20,3 +20,19 @@ export interface UserActionState {
   open: boolean | null;
   setOpen: (mobile: UserActionState["open"]) => void;
 }
+
+export interface UserEventModel {
+  eventId: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  category: string;
+  price: number;
+  attendanceCount: number;
+  imgUrl: string;
+
+  // User Info Typings
+  name: string;
+  email: string;
+}
