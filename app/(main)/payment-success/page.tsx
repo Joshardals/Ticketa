@@ -16,25 +16,27 @@ export default function SuccessPage() {
 
   useEffect(() => {
     const completeTicketProcessing = async () => {
-      const eventId = localStorage.getItem("event_id");
-      if (eventId && eventName) {
-        try {
-          await updateEventsById(eventId);
-          await createTicketInfo({
-            eventName,
-            eventId,
-            price: Number(amount),
-          });
-        } catch (error) {
-          console.log(`An unexpected error occured: ${error}`);
-        } finally {
-          localStorage.removeItem("event_id");
+      if (typeof window !== "undefined") {
+        const eventId = localStorage.getItem("event_id");
+        if (eventId && eventName) {
+          try {
+            await updateEventsById(eventId);
+            await createTicketInfo({
+              eventName,
+              eventId,
+              price: Number(amount),
+            });
+          } catch (error) {
+            console.log(`An unexpected error occurred: ${error}`);
+          } finally {
+            localStorage.removeItem("event_id");
+          }
         }
       }
     };
 
     completeTicketProcessing();
-  }, []);
+  }, [amount, eventName]);
   return (
     <div className="flex items-center justify-center min-h-screen flex-col space-y-4 max-w-[50rem] mx-auto text-center p-5">
       <FaRegCircleCheck className="text-emeraldGreen size-10" />
