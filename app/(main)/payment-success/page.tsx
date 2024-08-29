@@ -11,5 +11,8 @@ import { useEffect } from "react";
 import { FaRegCircleCheck } from "react-icons/fa6";
 
 export default function PaymentSuccessPage() {
+  const searchParams = useSearchParams();
+  const amount = searchParams.get("amount");
+  const eventName = searchParams.get("event_name");
   return <div>page</div>;
 }
