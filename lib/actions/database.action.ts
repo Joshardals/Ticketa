@@ -59,6 +59,7 @@ export async function createTicketInfo(data: TicketParams) {
       }
     );
 
+    revalidatePath("/my-tickets");
     return { success: true, msg: "Ticket created Successfully!" };
   } catch (error: any) {
     console.log(`Failed to create Ticket document in the db: ${error.message}`);
