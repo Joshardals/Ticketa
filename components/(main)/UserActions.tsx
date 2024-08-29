@@ -10,6 +10,7 @@ import {
 import { signOutUser } from "@/lib/actions/auth.action";
 import { navLinks } from "@/lib/data";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export function UserActions({ initials }: { initials: string }) {
@@ -44,7 +45,7 @@ export function UserActions({ initials }: { initials: string }) {
               item.label === "Home" || item.label === "Explore Events"
                 ? "hidden"
                 : ""
-            } md:hidden`}
+            }`}
           >
             <Link href={item.href}>{item.label}</Link>
           </DropdownMenuItem>

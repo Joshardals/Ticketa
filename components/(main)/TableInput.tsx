@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate, formatPrice } from "@/lib/utils";
+import { Tickets } from "lucide-react";
 
 interface TableProps {
   caption?: string;
@@ -19,6 +20,9 @@ interface TableProps {
 export function TableInput(data: TableProps) {
   return (
     <Table className={`bg-paleYellow rounded-lg max-sm:w-[35rem]`}>
+      <TableCaption className="text-onyx/50">
+        A list of your purchased tickets
+      </TableCaption>
       <TableHeader className="">
         <TableRow>
           {data.header.map((data, index) => {
@@ -35,8 +39,8 @@ export function TableInput(data: TableProps) {
         </TableRow>
       </TableHeader>
 
-      <TableBody>
-        {data.tickets?.map((ticket, index) => (
+      {data.tickets?.map((ticket, index) => (
+        <TableBody>
           <TableRow key={index} className="hover:bg-onyx/10">
             <TableCell>{ticket.ticketId}</TableCell>
             <TableCell>{ticket.eventName}</TableCell>
@@ -46,8 +50,8 @@ export function TableInput(data: TableProps) {
             </TableCell>
             <TableCell className="">{formatPrice(ticket.price)}</TableCell>
           </TableRow>
-        ))}
-      </TableBody>
+        </TableBody>
+      ))}
     </Table>
   );
 }
