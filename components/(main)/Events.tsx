@@ -13,56 +13,17 @@ export function Events() {
   const { query } = SearchQuery();
   const { selectedValue } = CategoryQuery();
 
-  // useEffect(() => {
-  //   if (isInitialMount.current) {
-  //     // Skip the first render
-  //     isInitialMount.current = false;
-  //     return;
-  //   }
-
-  //   const fetchEvents = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const { data } = await getEvents();
-  //       setEvents(data);
-  //       setFilteredEvents(data);
-  //     } catch (error: any) {
-  //       console.log(`Error: ${error.message}`);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchEvents();
-  // }, []);
-
   useEffect(() => {
-    console.log("useEffect triggered"); // Log when useEffect is triggered
-
-    // if (isInitialMount.current) {
-    //   console.log("Initial mount detected, skipping fetch."); // Log if it's the first render
-    //   isInitialMount.current = false;
-    //   return;
-    // }
-
     const fetchEvents = async () => {
-      console.log("Starting fetchEvents..."); // Log when fetch starts
-
       try {
         setLoading(true);
-        console.log("Loading state set to true"); // Log loading state change
-
         const { data } = await getEvents();
-        console.log("Events fetched successfully:", data); // Log fetched data
-
         setEvents(data);
         setFilteredEvents(data);
-        console.log("Events and filteredEvents state updated"); // Log state updates
       } catch (error: any) {
-        console.log(`Error during fetch: ${error.message}`); // Log any errors
+        console.log(`Error: ${error.message}`);
       } finally {
         setLoading(false);
-        console.log("Loading state set to false"); // Log final loading state change
       }
     };
 

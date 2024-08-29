@@ -1,10 +1,7 @@
 "use client";
 import { Checkout } from "@/components/(main)/Checkout";
 
-import {
-  checkIfHasTicket,
-  getEventsById,
-} from "@/lib/actions/database.action";
+import { checkIfHasTicket, getEventsById } from "@/lib/actions/database.action";
 import { formatPrice, formatSubCurrency } from "@/lib/utils";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -23,19 +20,12 @@ const stripePromise = loadStripe(
 export default function CheckoutContainer() {
   const pathname = usePathname();
   const id = pathname.split("/")[2];
-  const isInitialMount = useRef(true);
   const [event, setEvent] = useState<UserEventModel | null>();
   const [hasTicket, setHasTicket] = useState();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (isInitialMount.current) {
-      // Skip the first render
-      isInitialMount.current = false;
-      return;
-    }
-
     const fetchEventDetails = async () => {
       try {
         setLoading(true);
