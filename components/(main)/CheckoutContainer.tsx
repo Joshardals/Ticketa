@@ -1,9 +1,8 @@
 "use client";
 import { Checkout } from "@/components/(main)/Checkout";
-import EventsHeader from "@/components/(main)/EventsHeader";
+
 import {
   checkIfHasTicket,
-  getCurrentUserInfo,
   getEventsById,
 } from "@/lib/actions/database.action";
 import { formatPrice, formatSubCurrency } from "@/lib/utils";
