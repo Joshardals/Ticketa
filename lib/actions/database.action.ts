@@ -1,12 +1,16 @@
 "use server";
-import { UserInfoParams } from "@/typings/database";
+import { TicketParams, UserInfoParams } from "@/typings/database";
 import { databases } from "../appwrite.config";
 import { getCurrentUser } from "./auth.action";
 import { ID, Query } from "node-appwrite";
 import { revalidatePath } from "next/cache";
 
-const { APPWRITE_DATABASE_ID, APPWRITE_USERS_ID, APPWRITE_EVENTS_ID } =
-  process.env;
+const {
+  APPWRITE_DATABASE_ID,
+  APPWRITE_USERS_ID,
+  APPWRITE_EVENTS_ID,
+  APPWRITE_TICKETS_ID,
+} = process.env;
 
 interface ExportType {
   success: boolean;
@@ -37,6 +41,32 @@ export async function createUserInfo(data: UserInfoParams) {
   }
 }
 
+// Generate a ticket after a user successfully purchases an event ticket
+export async function createTicketInfo(data: TicketParams) {
+  const user = await getCurrentUser();
+  const { $id: userId } = user;
+  try {
+    await databases.createDocument(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_TICKETS_ID as string,
+      ID.unique(),
+      {
+        ticketId: ID.unique(),
+        eventName: data.eventName,
+        eventId: data.eventId,
+        userId,
+        purchaseDate: new Date(),
+        price: data.price,
+      }
+    );
+
+    return { success: true, msg: "Ticket created Successfully!" };
+  } catch (error: any) {
+    console.log(`Failed to create Ticket document in the db: ${error.message}`);
+    return { success: false, msg: error.message };
+  }
+}
+
 // Trying to get the current logged in user info.
 export async function getCurrentUserInfo(): Promise<ExportType> {
   try {
@@ -53,6 +83,27 @@ export async function getCurrentUserInfo(): Promise<ExportType> {
   } catch (error: any) {
     console.error(
       `Failed to fetch User Info Document from the DB: ${error.message}`
+    );
+    return { success: false, msg: error.message };
+  }
+}
+
+// Trying to get the current logged in user ticket.
+export async function getCurrentUserTicket(): Promise<ExportType> {
+  try {
+    const user = await getCurrentUser();
+    const { $id: userId } = user;
+
+    const data = await databases.listDocuments(
+      APPWRITE_DATABASE_ID as string,
+      APPWRITE_TICKETS_ID as string,
+      [Query.equal("userId", userId)]
+    );
+
+    return { success: true, data: data.documents };
+  } catch (error: any) {
+    console.error(
+      `Failed to fetch User Ticket Info Document from the DB: ${error.message}`
     );
     return { success: false, msg: error.message };
   }

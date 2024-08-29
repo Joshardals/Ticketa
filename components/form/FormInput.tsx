@@ -40,7 +40,7 @@ export function ButtonInput({
 }: FormInputProps) {
   return (
     <Button
-      variant={variant || "ticketa"}
+      variant={variant || "ticket"}
       disabled={loading || disabled}
       className="w-full"
     >

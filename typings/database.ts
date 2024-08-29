@@ -5,3 +5,9 @@ export interface UserInfoParams {
   name: string;
   username: string;
 }
+
+export interface TicketParams {
+  eventName: string;
+  eventId: string;
+  price: number;
+}

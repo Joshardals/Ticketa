@@ -1,6 +1,9 @@
 "use client";
 import { ButtonInput } from "@/components/form/FormInput";
-import { updateEventsById } from "@/lib/actions/database.action";
+import {
+  createTicketInfo,
+  updateEventsById,
+} from "@/lib/actions/database.action";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -12,11 +15,25 @@ export default function SuccessPage() {
   const eventName = searchParams.get("event_name");
 
   useEffect(() => {
-    const eventId = localStorage.getItem("event_id");
-    if (eventId) {
-      updateEventsById(eventId);
-      localStorage.removeItem("event_id");
-    }
+    const completeTicketProcessing = async () => {
+      const eventId = localStorage.getItem("event_id");
+      if (eventId && eventName) {
+        try {
+          await updateEventsById(eventId);
+          await createTicketInfo({
+            eventName,
+            eventId,
+            price: Number(amount),
+          });
+        } catch (error) {
+          console.log(`An unexpected error occured: ${error}`);
+        } finally {
+          localStorage.removeItem("event_id");
+        }
+      }
+    };
+
+    completeTicketProcessing();
   }, []);
   return (
     <div className="flex items-center justify-center min-h-screen flex-col space-y-4 max-w-[50rem] mx-auto text-center p-5">

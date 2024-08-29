@@ -2,10 +2,17 @@ import EventsHeader from "@/components/(main)/EventsHeader";
 import { formatDate, formatPrice } from "@/lib/utils";
 import { checkIfHasTicket, getEventsById } from "@/lib/actions/database.action";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { FaRegUser } from "react-icons/fa6";
+import { FaCalendarCheck } from "react-icons/fa";
 import { ButtonInput } from "@/components/form/FormInput";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Events | Ticketa",
+  description:
+    "Explore upcoming student events on Ticketa. From lively parties to exciting concerts, find all the events you're interested in and secure your tickets. Browse through our curated list of events and make your plans today.",
+};
 
 export default async function EventPage({
   params: { id },
@@ -20,10 +27,10 @@ export default async function EventPage({
 
   return (
     <div className="maxCenter">
-      <div className="px-5">
+      <div className="max-sm:px-5">
         <EventsHeader />
       </div>
-      <div className="flex justify-center p-5 space-y-4">
+      <div className="contentCenter">
         <div className="bg-paleYellow p-5 rounded-lg max-w-2xl space-y-4">
           <h1 className="text-2xl font-bold">{data.title}</h1>
           <Image
@@ -34,15 +41,23 @@ export default async function EventPage({
             className="object-cover h-72 rounded-lg w-full"
           />
           <p className="text-pretty">{data.description}</p>
-          <p>
-            Date: <b>{formatDate(data.date)}</b>
-          </p>
+          <div className="flex items-center divide-x divide-coolGray space-x-2">
+            <p>
+              Date: <b>{formatDate(data.date)}</b>
+            </p>
+          </div>
           <p>
             Location: <b>{data.location}</b>
           </p>
           <p>
             Category: <b>{data.category}</b>
           </p>
+          {isPastEvent && (
+            <div className="flex items-center space-x-2">
+              <FaCalendarCheck />
+              <b className="text-deepRed">This event has ended.</b>
+            </div>
+          )}
           <p>
             Price: <b>{formatPrice(data.price)}</b>
           </p>

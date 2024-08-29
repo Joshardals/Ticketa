@@ -7,6 +7,8 @@ import {
 import { formatPrice, formatSubCurrency } from "@/lib/utils";
 import { ButtonInput } from "../form/FormInput";
 import { updateEventsById } from "@/lib/actions/database.action";
+import Link from "next/link";
+import { CheckoutSkeleton } from "../ui/skeletons/CheckoutSkeleton";
 
 export function Checkout({ amount, event }: { amount: number; event: any }) {
   const stripe = useStripe();
@@ -76,16 +78,23 @@ export function Checkout({ amount, event }: { amount: number; event: any }) {
       {clientSecret ? (
         <>
           <PaymentElement />
-          <div className="mt-4">
+          <div className="mt-4 flex items-center max-sm:flex-col gap-2">
             <ButtonInput
-              label={`Pay ${formatPrice(amount)}`}
+              label={`Complete Payment: ${formatPrice(amount)}`}
               loading={loading}
               variant={"ticket"}
             />
+            <Link href="/events" className="w-full">
+              <ButtonInput
+                label={`Return to Events`}
+                loading={loading}
+                variant={"home"}
+              />
+            </Link>
           </div>
         </>
       ) : (
-        <p>Loading...</p>
+        <CheckoutSkeleton />
       )}
 
       {errorMessage && (

@@ -14,11 +14,6 @@ export function MainHeader() {
 
       {/* User Profile Icon - This contains everything about user actions, Logout for example.  */}
       <UserProfile />
-
-      {/* Hamburger Menu */}
-      {/* <div className="pt-1 max-h-5">
-        <NavToggle />
-      </div>  I don't know if I will need this sha. But let's see.*/}
     </header>
   );
 }

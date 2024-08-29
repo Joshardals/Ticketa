@@ -39,10 +39,6 @@ export function formatDate(isoString: string): string {
 
 // You don't need to know what the code above does, it is basically just formatting the date properly. (Dont't waste your time trying to understnad it.)
 
-// export function formatPrice(price: number): string {
-//   return `₦${price.toLocaleString("en-NG", { minimumFractionDigits: 0 })}`;
-// }
-
 export function formatPrice(price: number): string {
   return `$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 }
