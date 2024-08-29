@@ -2,6 +2,13 @@ import EventsHeader from "@/components/(main)/EventsHeader";
 import { TableInput } from "@/components/(main)/TableInput";
 import { UserProfile } from "@/components/shared/UserProfile";
 import { getCurrentUserTicket } from "@/lib/actions/database.action";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Tickets | Ticketa",
+  description:
+    "View and manage your purchased event tickets on Ticketa. Check the status, details, and purchase dates of your tickets all in one place.",
+};
 
 export default async function TicketsPage() {
   const { data } = await getCurrentUserTicket();
