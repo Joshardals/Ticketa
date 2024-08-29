@@ -39,11 +39,11 @@ export function Events() {
   useEffect(() => {
     console.log("useEffect triggered"); // Log when useEffect is triggered
 
-    if (isInitialMount.current) {
-      console.log("Initial mount detected, skipping fetch."); // Log if it's the first render
-      isInitialMount.current = false;
-      return;
-    }
+    // if (isInitialMount.current) {
+    //   console.log("Initial mount detected, skipping fetch."); // Log if it's the first render
+    //   isInitialMount.current = false;
+    //   return;
+    // }
 
     const fetchEvents = async () => {
       console.log("Starting fetchEvents..."); // Log when fetch starts
