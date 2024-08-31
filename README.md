@@ -10,7 +10,7 @@
 - **Payment Integration**: Pay smoothly using Stripe or PayPal.
 - **Notifications**: Get email and SMS alerts for event updates and ticket sales.
 - **Reviews and Ratings**: Leave feedback on events you've attended.
-- **Event Creation** *(Optional)*: Organizers can create and manage events.
+- **Event Creation** *(Optional)*: Organizers can create and manage events.  
 
 ## Technology Stack
 
