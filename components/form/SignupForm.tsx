@@ -1,24 +1,22 @@
-"use client";
-import { AuthValidationType } from "@/typings/form";
-import {
-  ButtonInput,
-  FormInput,
-  SelectInput,
-} from "@/components/form/FormInput";
-import { Form } from "@/components/ui/form";
-import Link from "next/link";
-import { SignUpValidation } from "@/lib/validations/form";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signupUser } from "@/lib/actions/auth.action";
+"use client"; // Ensures this file runs on the client side.
+
+import { AuthValidationType } from "@/typings/form"; // TypeScript type for form validation.
+import { ButtonInput, FormInput } from "@/components/form/FormInput"; // Import custom form components.
+import { Form } from "@/components/ui/form"; // Import Form component for form management.
+import Link from "next/link"; // Import Link for client-side navigation.
+import { SignUpValidation } from "@/lib/validations/form"; // Import Zod validation schema for sign-up.
+import { useForm } from "react-hook-form"; // Import useForm hook for managing form state.
+import { useRouter } from "next/navigation"; // Import useRouter hook for navigation.
+import { useState } from "react"; // Import useState for managing component state.
+import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver to integrate Zod with react-hook-form.
+import { signupUser } from "@/lib/actions/auth.action"; // Import function for signing up users.
 
 export function SignupForm() {
-  const [error, setError] = useState<string | null>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null); // State for error messages.
+  const [loading, setLoading] = useState<boolean>(false); // State for loading spinner.
+  const router = useRouter(); // Router instance for navigation.
 
+  // Initialize useForm with Zod resolver for validation and default values.
   const form = useForm<AuthValidationType>({
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
@@ -30,11 +28,13 @@ export function SignupForm() {
     },
   });
 
+  // Function to handle form submission.
   const onSubmit = async (values: AuthValidationType) => {
     try {
-      setLoading(true); // Set the loading state to be true
-      setError(null); // Clear previous errors
+      setLoading(true); // Start loading state.
+      setError(null); // Clear previous errors.
 
+      // Attempt to sign up the user.
       const result = await signupUser({
         fullname: values.fullname,
         username: values.username,
@@ -42,28 +42,32 @@ export function SignupForm() {
         password: values.password,
       });
 
+      // Check if the sign-up was successful.
       if (!result.success) {
-        setError(result.msg);
+        setError(result.msg); // Set error message if sign-up fails.
         return;
       }
 
-      alert("User created successfully");
-      router.push("/home");
+      alert("User created successfully"); // Show success message.
+      router.push("/home"); // Redirect to home page on successful sign-up.
     } catch (error: any) {
-      console.log(`Error signing up: ${error.message}`);
-      setError("An unexpected error occurred. Please try again.");
+      console.log(`Error signing up: ${error.message}`); // Log any unexpected errors.
+      setError("An unexpected error occurred. Please try again."); // Display a generic error message.
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading state.
     }
   };
 
   return (
     <Form {...form}>
+      {" "}
+      {/* Spread form methods and state into the Form component. */}
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 max-sm:w-full sm:w-96"
-        autoComplete="off"
+        onSubmit={form.handleSubmit(onSubmit)} // Handle form submission.
+        className="space-y-6 max-sm:w-full sm:w-96" // Responsive styling.
+        autoComplete="off" // Disable browser autocomplete.
       >
+        {/* Input fields for sign-up. */}
         <FormInput
           form={form}
           name="fullname"
@@ -85,7 +89,6 @@ export function SignupForm() {
           placeholder="Email"
           loading={loading}
         />
-
         <FormInput
           form={form}
           name="password"
@@ -93,7 +96,6 @@ export function SignupForm() {
           placeholder="Password"
           loading={loading}
         />
-
         <FormInput
           form={form}
           name="confirmPassword"
@@ -102,9 +104,13 @@ export function SignupForm() {
           loading={loading}
         />
 
+        {/* Display error message if any. */}
         {error && <p className="text-deepRed text-xs font-bold">{error}</p>}
 
+        {/* Submit button for the form. */}
         <ButtonInput loading={loading} label="Sign Up" />
+
+        {/* Link to login page for users who already have an account. */}
         <p className="text-sm text-center">
           Already have an account?{" "}
           <Link href="/" className="text-deepRed font-semibold">

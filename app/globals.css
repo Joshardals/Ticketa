@@ -1,40 +1,76 @@
+/* Import the base styles, components, and utility classes from Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Define custom utility classes using Tailwind's @layer directive */
 @layer utilities {
+  /* Apply styles to the html and body elements */
   html,
   body {
     @apply p-0 m-0 text-base leading-6 w-full bg-softWhite text-darkCharcoal font-nunito scroll-smooth;
+    /* Remove default padding and margin */
+    /* Set base text size and line height */
+    /* Ensure full width and smooth scrolling */
+    /* Set background color to soft white */
+    /* Set text color to dark charcoal */
+    /* Apply the Nunito font */
   }
 
+  /* Center content horizontally and vertically with minimum height of the viewport */
   .contentCenter {
     @apply flex flex-col items-center justify-center min-h-screen;
+    /* Use flexbox to center items */
+    /* Flex direction column */
+    /* Center items horizontally and vertically */
+    /* Set minimum height to 100vh */
   }
+
+  /* Center content with a maximum width and horizontal margin auto */
   .maxCenter {
     @apply max-w-[1200px] mx-auto;
+    /* Set maximum width to 1200px */
+    /* Center horizontally with auto margins */
   }
 
+  /* Styles for the navigation toggle button */
   .navToggle {
     @apply block relative z-10 cursor-pointer;
+    /* Display as block element */
+    /* Ensure it's positioned relative to its normal position */
+    /* Set a high z-index to ensure it's on top of other elements */
+    /* Show a pointer cursor on hover */
   }
 
+  /* Styles for the spans inside the navigation toggle button */
   .navToggle span {
     @apply relative block w-[22px] h-[2px] mb-[0.3rem] z-10;
-
+    /* Display as a block element with relative positioning */
+    /* Set width to 22px and height to 2px */
+    /* Add bottom margin of 0.3rem */
+    /* Set a high z-index */
     transform-origin: 1.5px 1px;
+    /* Set the point around which the element rotates */
     transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+    /* Smooth transition for transform property with a custom timing function */
   }
 
+  /* Rotate the first span 45 degrees when active */
   .navToggle span.active:first-child {
     @apply rotate-45;
+    /* Rotate the first span by 45 degrees */
   }
 
+  /* Hide the second span when active with a transition to opacity 0 */
   .navToggle span.active:nth-child(2) {
     @apply transition-opacity duration-1000 opacity-0;
+    /* Apply a transition to opacity with a duration of 1000ms */
+    /* Set opacity to 0 */
   }
 
+  /* Rotate the last span -45 degrees when active */
   .navToggle span.active:last-child {
     @apply -rotate-45;
+    /* Rotate the last span by -45 degrees */
   }
 }

@@ -1,45 +1,57 @@
-"use client";
-import { CategoryQuery, SearchQuery } from "@/lib/store";
-import { EventsCard } from "./EventsCard";
-import EventsFallback from "@/components/ui/skeletons/EventsSkeleton";
-import { getEvents } from "@/lib/actions/database.action";
-import { useEffect, useRef, useState } from "react";
+"use client"; // Indicates that this file should be processed on the client side
+
+import { CategoryQuery, SearchQuery } from "@/lib/store"; // Imports custom hooks for category and search queries
+import { EventsCard } from "./EventsCard"; // Imports the EventsCard component to display each event
+import EventsFallback from "@/components/ui/skeletons/EventsSkeleton"; // Imports a fallback component to show while loading
+import { getEvents } from "@/lib/actions/database.action"; // Imports function to fetch events from the server
+import { useEffect, useRef, useState } from "react"; // Imports React hooks for state management and side effects
 
 export function Events() {
+  // State to hold all events fetched from the server
   const [events, setEvents] = useState<any[]>();
+  // Ref to track if the component is mounted for the first time
   const isInitialMount = useRef(true);
+  // State to hold filtered events based on search and category
   const [filteredEvents, setFilteredEvents] = useState<any[]>();
-  const [loading, setLoading] = useState(true); // Loading state
+  // State to manage loading state
+  const [loading, setLoading] = useState(true);
+  // Hook to get the search query from the URL or state
   const { query } = SearchQuery();
+  // Hook to get the selected category from the URL or state
   const { selectedValue } = CategoryQuery();
 
+  // useEffect to fetch events when the component mounts
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        setLoading(true);
+        setLoading(true); // Set loading state to true before fetching
+
+        // Fetch events data from the server
         const { data } = await getEvents();
-        setEvents(data);
-        setFilteredEvents(data);
+        setEvents(data); // Set the fetched events in state
+        setFilteredEvents(data); // Initialize filtered events with all events
       } catch (error: any) {
-        console.log(`Error: ${error.message}`);
+        console.log(`Error: ${error.message}`); // Log any errors during fetch
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading state to false after fetch
       }
     };
 
-    fetchEvents();
-  }, []);
+    fetchEvents(); // Call the fetch function
+  }, []); // Empty dependency array means this effect runs once after the initial render
 
+  // useEffect to filter events based on search query and selected category
   useEffect(() => {
-    if (!events || events.length === 0) return;
+    if (!events || events.length === 0) return; // Do nothing if no events are present
 
-    // Set loading to true only if search was triggered, not like button
+    // Set loading to true while filtering
     setLoading(true);
 
+    // Debounce to limit how frequently the filtering occurs
     const debounce = setTimeout(() => {
-      let filtered = events;
+      let filtered = events; // Start with all events
 
-      // Sorting by Most Recent if Selected
+      // Sort by Most Recent if selected
       if (selectedValue === "most-recent") {
         filtered = [...filtered].sort(
           (a, b) =>
@@ -47,7 +59,7 @@ export function Events() {
         );
       }
 
-      // // Sorting by Most Popular if Selected, so the event that has the most attendance will come first
+      // Sort by Most Popular if selected
       if (selectedValue === "most-popular") {
         filtered = [...filtered].sort(
           (a, b) => b.attendanceCount.length - a.attendanceCount.length
@@ -73,21 +85,26 @@ export function Events() {
         );
       }
 
-      setFilteredEvents(filtered);
+      setFilteredEvents(filtered); // Update state with filtered events
 
-      setLoading(false); // Set loading to false when filtering is complete
-    }, 1000);
+      setLoading(false); // Set loading state to false after filtering is complete
+    }, 1000); // Debounce delay of 1 second
 
+    // Cleanup function to clear the debounce timeout
     return () => clearTimeout(debounce);
-  }, [query, events, selectedValue]);
+  }, [query, events, selectedValue]); // Runs when `query`, `events`, or `selectedValue` changes
 
-  if (loading) return <EventsFallback />; // Show fallback Ui Skeleton while loading
+  // Show fallback UI if loading
+  if (loading) return <EventsFallback />;
 
+  // Show a message if no events are found
   if (!filteredEvents) return <div className="px-5">No events found!</div>;
+
   return (
     <>
       {filteredEvents.length > 0 ? (
         <div className="px-5 grid lg:grid-cols-3 gap-4 lg:gap-8 md:grid-cols-2 grid-cols-1">
+          {/* Render EventsCard for each filtered event */}
           {filteredEvents?.map((event, index) => (
             <div key={index}>
               <EventsCard event={event} />

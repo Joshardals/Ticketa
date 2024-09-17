@@ -3,12 +3,6 @@ export interface CategoryState {
   selectedValue: string;
   setSelectedValue: (selectedValue: CategoryState["selectedValue"]) => void;
 }
-// Typings to check if a user has liked an event.
-export interface HasLikedState {
-  liked: boolean | null;
-  setLiked: (mobile: HasLikedState["liked"]) => void;
-}
-
 // Typings for the Search Query
 export interface SearchQueryState {
   query: string;

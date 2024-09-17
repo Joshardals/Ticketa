@@ -1,6 +1,7 @@
-"use client";
-import { BiCategoryAlt } from "react-icons/bi";
-import { CategoryQuery } from "@/lib/store";
+"use client"; // Ensures this component is run on the client side.
+
+import { BiCategoryAlt } from "react-icons/bi"; // Import icon for mobile view.
+import { CategoryQuery } from "@/lib/store"; // Import store hook for managing selected category.
 import {
   Select,
   SelectContent,
@@ -9,12 +10,12 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useEffect, useState } from "react";
+} from "@/components/ui/select"; // Import custom select components.
+import { useEffect, useState } from "react"; // Import hooks for state and effect management.
 
 export function Category() {
-  const [isMobile, setIsMobile] = useState(false);
-  const { setSelectedValue } = CategoryQuery();
+  const [isMobile, setIsMobile] = useState(false); // State to determine if the view is mobile.
+  const { setSelectedValue } = CategoryQuery(); // Hook to manage the selected category value.
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,8 +33,9 @@ export function Category() {
   }, []);
 
   const handleValueChange = (value: string) => {
-    setSelectedValue(value);
+    setSelectedValue(value); // Update the selected category value.
   };
+
   return (
     <Select onValueChange={handleValueChange}>
       <SelectTrigger className="w-[fit-content]">
@@ -41,15 +43,16 @@ export function Category() {
           placeholder={
             isMobile ? (
               <span className="flex items-center">
-                <BiCategoryAlt />
+                <BiCategoryAlt /> {/* Icon for mobile view */}
               </span>
             ) : (
-              "Select a Category"
+              "Select a Category" // Placeholder text for desktop view
             )
           }
         />
       </SelectTrigger>
       <SelectContent>
+        {/* Grouped items for different categories */}
         <SelectGroup>
           <SelectLabel>Sort By</SelectLabel>
           <SelectItem value="most-popular">Most Popular</SelectItem>
