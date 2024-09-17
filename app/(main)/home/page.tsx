@@ -26,7 +26,7 @@ export default function Homepage() {
             Join the festival fun
           </h1>
 
-          {/* Description text with a pretty  and margin-bottom */}
+          {/* Description text with a pretty color and margin-bottom */}
           <p className="text-pretty mb-4">
             Experience the thrill and excitement of our upcoming events.
           </p>

@@ -1,103 +1,104 @@
-"use server"; // Indicates that this code is to be executed on the server side.
+// Indicate that this code is intended to run on the server side
+"use server";
 
 // Import necessary types and functions
-import { AuthValidationType } from "@/typings/form"; // Type definition for user authentication data.
-import { ID } from "node-appwrite"; // Import Appwrite's ID utility for generating unique IDs.
-import { cookies } from "next/headers"; // Import cookies handling from Next.js.
-import { createAdminClient, createSessionClient } from "@/lib/appwrite.config"; // Import functions to create Appwrite clients.
-import { createUserInfo } from "./database.action"; // Import function to create user information in the database.
-import { redirect } from "next/navigation"; // Import redirect function from Next.js.
+import { AuthValidationType } from "@/typings/form"; // Type definition for authentication validation
+import { ID } from "node-appwrite"; // Import ID utility from Appwrite for generating unique IDs
+import { cookies } from "next/headers"; // Import cookies utility from Next.js for handling cookies
+import { createAdminClient, createSessionClient } from "@/lib/appwrite.config"; // Import functions to create Appwrite clients
+import { createUserInfo } from "./database.action"; // Import function to create user info in the database
+import { redirect } from "next/navigation"; // Import redirect function from Next.js for navigation
 
-// Server-side function to get the current logged-in user.
+// Function to get the current logged-in user
 export async function getCurrentUser() {
   try {
-    // Create a session client to interact with Appwrite's account service.
+    // Create a session-based client to interact with Appwrite
     const { account } = await createSessionClient();
-    // Fetch and return the current logged-in user's information.
+    // Retrieve and return the current user's account details
     return await account.get();
   } catch (error: any) {
-    // Return error message if there's an issue getting the current user.
+    // Return an error message if there is an issue retrieving the user
     return error.message;
   }
 }
 
-// Server-side function to sign in a user.
+// Function to sign in a user with email and password
 export async function signInUser(data: AuthValidationType) {
   try {
-    // Create an admin client to interact with Appwrite's account service.
+    // Create an admin-level client to interact with Appwrite
     const { account } = await createAdminClient();
-    // Create a session with the provided email and password.
+    // Create a new session for the user using email and password
     const session = await account.createEmailPasswordSession(
-      data.email!, // User's email.
-      data.password! // User's password.
+      data.email!, // User's email
+      data.password! // User's password
     );
 
-    // Set the session token in a cookie to manage user authentication state.
+    // Set a secure, HTTP-only cookie to store the session token
     cookies().set("userSession", session.secret, {
-      path: "/", // Cookie is valid for the entire website.
-      httpOnly: true, // Cookie is not accessible via JavaScript.
-      sameSite: "strict", // Cookie is sent only for same-site requests.
-      secure: true, // Cookie is only sent over HTTPS.
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
     });
 
-    // Return success response if the sign-in is successful.
+    // Return success status if the sign-in is successful
     return { success: true };
   } catch (error: any) {
-    // Return failure response with error message if there's an issue signing in.
+    // Return failure status and error message if the sign-in fails
     return { success: false, msg: error.message };
   }
 }
 
-// Server-side function to sign up a new user.
+// Function to sign up a new user
 export async function signupUser(data: AuthValidationType) {
   try {
-    // Create an admin client to interact with Appwrite's account service.
+    // Create an admin-level client to interact with Appwrite
     const { account } = await createAdminClient();
-    // Create a new user account with the provided details.
+    // Create a new user account in Appwrite with the provided details
     const response = await account.create(
-      ID.unique(), // Generate a unique user ID.
-      data.email!, // User's email.
-      data.password!, // User's password.
-      data.fullname // User's full name.
+      ID.unique(), // Generate a unique user ID
+      data.email!, // User's email
+      data.password!, // User's password
+      data.fullname // User's full name
     );
 
-    // Sign in the newly created user.
+    // Sign in the newly created user
     await signInUser({ email: data.email, password: data.password });
 
-    // Extract user ID and email from the response.
+    // Extract user details from the response
     const { $id: userId, email } = response;
 
-    // Create additional user information in the database.
+    // Create a document in the database with additional user information
     await createUserInfo({
-      userId,
-      username: data.username!, // User's username.
-      email,
-      name: data.fullname!, // User's full name.
+      userId, // User ID from Appwrite
+      username: data.username!, // User's username
+      email, // User's email
+      name: data.fullname!, // User's full name
     });
 
-    // Return success response if the sign-up is successful.
+    // Return success status if the signup is successful
     return { success: true };
   } catch (error: any) {
-    // Return failure response with error message if there's an issue signing up.
+    // Return failure status and error message if the signup fails
     return { success: false, msg: error.message };
   }
 }
 
-// Server-side function to sign out a user.
+// Function to sign out the current user
 export async function signOutUser() {
   try {
-    // Create a session client to interact with Appwrite's account service.
+    // Create a session-based client to interact with Appwrite
     const { account } = await createSessionClient();
 
-    // Delete the user session cookie.
+    // Delete the 'userSession' cookie to remove the session token
     cookies().delete("userSession");
-    // Delete the current user session from Appwrite.
+    // Delete the current user session in Appwrite
     await account.deleteSession("current");
   } catch (error: any) {
-    // Return error message if there's an issue signing out.
+    // Return error message if there is an issue during sign out
     return error.message;
   }
 
-  // Redirect the user to the homepage after successful sign-out.
+  // Redirect the user to the homepage after a successful sign-out
   redirect("/");
 }

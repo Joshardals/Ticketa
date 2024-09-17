@@ -1,93 +1,105 @@
-"use server"; // Indicates that this code is executed on the server side.
+// Indicate that this code is intended to run on the server side
+"use server";
 
-import { TicketParams, UserInfoParams } from "@/typings/database"; // Import type definitions for user and ticket data.
-import { databases } from "../appwrite.config"; // Import Appwrite database configuration.
-import { getCurrentUser } from "./auth.action"; // Import function to get the currently logged-in user.
-import { ID, Query } from "node-appwrite"; // Import Appwrite's ID and Query utilities.
-import { revalidatePath } from "next/cache"; // Import function to revalidate Next.js paths.
+// Import necessary types and functions
+import { TicketParams, UserInfoParams } from "@/typings/database"; // Type definitions for ticket and user info parameters
+import { databases } from "../appwrite.config"; // Import the Appwrite databases client configuration
+import { getCurrentUser } from "./auth.action"; // Import function to get the current logged-in user
+import { ID, Query } from "node-appwrite"; // Import ID utility and Query functions from Appwrite for document handling
+import { revalidatePath } from "next/cache"; // Import revalidatePath to invalidate cached paths
 
+// Retrieve environment variables for Appwrite configuration
 const {
   APPWRITE_DATABASE_ID,
   APPWRITE_USERS_ID,
   APPWRITE_EVENTS_ID,
   APPWRITE_TICKETS_ID,
-} = process.env; // Retrieve Appwrite database IDs from environment variables.
+} = process.env;
 
+// Define the structure of responses from database operations
 interface ExportType {
   success: boolean;
-  data?: any;
-  msg?: any;
+  data?: any; // Data from the database query
+  msg?: any; // Error message or success message
 }
 
-// Create a user information document in the database.
+// Function to create a user info document in the database
 export async function createUserInfo(data: UserInfoParams) {
   try {
-    // Create a new document in the users collection with provided data.
+    // Create a new document in the Users collection with the given user information
     await databases.createDocument(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_USERS_ID as string,
-      ID.unique(),
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_USERS_ID as string, // Users collection ID
+      ID.unique(), // Generate a unique document ID
       {
-        userId: data.userId,
-        email: data.email,
-        name: data.name,
-        username: data.username,
+        userId: data.userId, // User ID
+        email: data.email, // User email
+        name: data.name, // User full name
+        username: data.username, // User username
       }
     );
 
-    return { success: true }; // Return success if document creation is successful.
+    // Return success status if the document creation is successful
+    return { success: true };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if document creation fails
     console.log(`Failed to create user document in the db: ${error.message}`);
     return { success: false, msg: error.message };
   }
 }
 
-// Generate a ticket after a user successfully purchases an event ticket.
+// Function to create a ticket document after a user purchases an event ticket
 export async function createTicketInfo(data: TicketParams) {
-  const user = await getCurrentUser(); // Get the current logged-in user.
-  const { $id: userId } = user;
   try {
-    // Create a new ticket document in the tickets collection with provided data.
+    // Retrieve the current logged-in user
+    const user = await getCurrentUser();
+    const { $id: userId } = user; // Extract user ID from the user object
+
+    // Create a new document in the Tickets collection with ticket information
     await databases.createDocument(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_TICKETS_ID as string,
-      ID.unique(),
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_TICKETS_ID as string, // Tickets collection ID
+      ID.unique(), // Generate a unique document ID
       {
-        ticketId: ID.unique(),
-        eventName: data.eventName,
-        eventId: data.eventId,
-        userId,
-        purchaseDate: new Date(),
-        price: data.price,
+        ticketId: ID.unique(), // Generate a unique ticket ID
+        eventName: data.eventName, // Event name
+        eventId: data.eventId, // Event ID
+        userId, // User ID
+        purchaseDate: new Date(), // Current date and time
+        price: data.price, // Ticket price
       }
     );
 
-    revalidatePath("/my-tickets"); // Revalidate the path to refresh ticket data.
-    return { success: true, msg: "Ticket created Successfully!" }; // Return success message.
+    // Revalidate the path to refresh the ticket list on the client-side
+    revalidatePath("/my-tickets");
+
+    // Return success status with a message
+    return { success: true, msg: "Ticket created Successfully!" };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if ticket creation fails
     console.log(`Failed to create Ticket document in the db: ${error.message}`);
     return { success: false, msg: error.message };
   }
 }
 
-// Fetch the current logged-in user info.
+// Function to get the current logged-in user info
 export async function getCurrentUserInfo(): Promise<ExportType> {
   try {
-    const user = await getCurrentUser(); // Get the current logged-in user.
-    const { $id: userId } = user;
+    // Retrieve the current logged-in user
+    const user = await getCurrentUser();
+    const { $id: userId } = user; // Extract user ID from the user object
 
-    // Retrieve user document from the database using userId.
+    // Query the Users collection to find the document matching the current user's ID
     const data = await databases.listDocuments(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_USERS_ID as string,
-      [Query.equal("userId", userId)]
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_USERS_ID as string, // Users collection ID
+      [Query.equal("userId", userId)] // Query filter to match user ID
     );
 
-    return { success: true, data: data.documents[0] }; // Return user info if successful.
+    // Return success status with the user info document
+    return { success: true, data: data.documents[0] };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if fetching user info fails
     console.error(
       `Failed to fetch User Info Document from the DB: ${error.message}`
     );
@@ -95,22 +107,24 @@ export async function getCurrentUserInfo(): Promise<ExportType> {
   }
 }
 
-// Fetch the current logged-in user's tickets.
+// Function to get all tickets of the current logged-in user
 export async function getCurrentUserTicket(): Promise<ExportType> {
   try {
-    const user = await getCurrentUser(); // Get the current logged-in user.
-    const { $id: userId } = user;
+    // Retrieve the current logged-in user
+    const user = await getCurrentUser();
+    const { $id: userId } = user; // Extract user ID from the user object
 
-    // Retrieve ticket documents from the database using userId.
+    // Query the Tickets collection to find all tickets matching the current user's ID
     const data = await databases.listDocuments(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_TICKETS_ID as string,
-      [Query.equal("userId", userId)]
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_TICKETS_ID as string, // Tickets collection ID
+      [Query.equal("userId", userId)] // Query filter to match user ID
     );
 
-    return { success: true, data: data.documents }; // Return tickets if successful.
+    // Return success status with the list of user tickets
+    return { success: true, data: data.documents };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if fetching tickets fails
     console.error(
       `Failed to fetch User Ticket Info Document from the DB: ${error.message}`
     );
@@ -118,19 +132,20 @@ export async function getCurrentUserTicket(): Promise<ExportType> {
   }
 }
 
-// Fetch all events.
+// Function to get all events from the database
 export async function getEvents() {
   try {
-    // Retrieve all event documents from the database.
+    // Query the Events collection to retrieve all event documents
     const data = await databases.listDocuments(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_EVENTS_ID as string,
-      [Query.orderDesc("")]
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_EVENTS_ID as string, // Events collection ID
+      [Query.orderDesc("")] // Order documents in descending order (default ordering)
     );
 
-    return { success: true, data: data.documents }; // Return events if successful.
+    // Return success status with the list of events
+    return { success: true, data: data.documents };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if fetching events fails
     console.error(
       `Failed to fetch Events Document from the DB: ${error.message}`
     );
@@ -138,19 +153,20 @@ export async function getEvents() {
   }
 }
 
-// Fetch event details by ID.
+// Function to get event details by event ID
 export async function getEventsById(id: string): Promise<ExportType> {
   try {
-    // Retrieve event document from the database using eventId.
+    // Query the Events collection to find the document matching the provided event ID
     const data = await databases.listDocuments(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_EVENTS_ID as string,
-      [Query.equal("eventId", id)]
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_EVENTS_ID as string, // Events collection ID
+      [Query.equal("eventId", id)] // Query filter to match event ID
     );
 
-    return { success: true, data: data.documents[0] }; // Return event details if successful.
+    // Return success status with the event document
+    return { success: true, data: data.documents[0] };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if fetching event fails
     console.error(
       `Failed to fetch Events Document from the DB: ${error.message}`
     );
@@ -158,70 +174,74 @@ export async function getEventsById(id: string): Promise<ExportType> {
   }
 }
 
-// Update an event by its ID.
+// Function to update an event by its ID
 export async function updateEventsById(id: string) {
   try {
-    // Fetch the event document by ID.
+    // Retrieve the event document by its ID
     const event = await getEventsById(id);
 
-    // Fetch the current logged-in user.
+    // Retrieve the current logged-in user
     const user = await getCurrentUser();
-    const { $id: userId } = user;
+    const { $id: userId } = user; // Extract user ID from the user object
 
-    // If event doesn't exist, throw an error.
+    // Check if the event document exists
     if (!event) {
-      throw new Error("Event not found");
+      throw new Error("Event not found"); // Throw an error if the event is not found
     }
 
-    // Get the current attendanceCount array or initialize if not existing.
+    // Get the current attendance count array or initialize if it does not exist
     const attendanceCount = event.data.attendanceCount || [];
 
-    // Add the user ID to the attendanceCount array if not already included.
+    // Add the user ID to the attendance count array if it is not already included
     if (!attendanceCount.includes(userId)) {
       attendanceCount.push(userId);
     }
 
-    // Update the event document with the new attendanceCount.
+    // Update the event document with the new attendance count
     const updatedEvent = await databases.updateDocument(
-      APPWRITE_DATABASE_ID as string,
-      APPWRITE_EVENTS_ID as string,
-      event.data.$id,
+      APPWRITE_DATABASE_ID as string, // Database ID
+      APPWRITE_EVENTS_ID as string, // Events collection ID
+      event.data.$id, // Document ID
       {
-        attendanceCount, // Set the updated array.
+        attendanceCount, // Updated attendance count array
       }
     );
 
-    // Revalidate the event page to reflect updates.
+    // Revalidate the path to refresh the event details on the client-side
     revalidatePath("/(main)/events/[id]", "page");
-    return { success: true, data: updatedEvent }; // Return success with updated event data.
+
+    // Return success status with the updated event document
+    return { success: true, data: updatedEvent };
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if updating the event fails
     console.error(`Failed to update Events Document: ${error.message}`);
     return { success: false, msg: error.message };
   }
 }
 
-// Check if a user has already purchased a ticket for an event.
+// Function to check if the current user has already purchased a ticket for a specific event
 export async function checkIfHasTicket(id: string) {
   try {
-    // Fetch the event document by ID.
+    // Retrieve the event document by its ID
     const event = await getEventsById(id);
 
-    // Fetch the current logged-in user.
+    // Retrieve the current logged-in user
     const user = await getCurrentUser();
-    const { $id: userId } = user;
+    const { $id: userId } = user; // Extract user ID from the user object
 
-    // Get the current attendanceCount array.
+    // Get the current attendance count array or initialize if it does not exist
     const attendanceCount = event.data.attendanceCount || [];
 
-    // Check if the user ID is included in the attendanceCount array.
+    // Check if the user ID is included in the attendance count array
     if (attendanceCount.includes(userId)) {
-      return { success: true, msg: true }; // Return true if the user has a ticket.
+      // Return success status with a message indicating that the user has a ticket
+      return { success: true, msg: true };
     } else {
-      return { success: true, msg: false }; // Return false if the user does not have a ticket.
+      // Return success status with a message indicating that the user does not have a ticket
+      return { success: true, msg: false };
     }
   } catch (error: any) {
-    // Log error and return failure response if there's an issue.
+    // Log and return error message if checking tickets fails
     console.error(`Failed to check if user has tickets: ${error.message}`);
     return { success: false, msg: error.message };
   }
