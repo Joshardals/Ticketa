@@ -37,7 +37,8 @@ export function EventsCard({ event }: { event: any }) {
       <h2 className="font-bold text-xl">{event.title}</h2>
       {/* Event date and location */}
       <p className="text-coolGray mt-2 text-xs">
-        {formatDate(event.date)} | {event.location} // Display formatted date
+        {formatDate(event.date)} | {event.location}{" "}
+        {/* Display formatted date */}
         and location
       </p>
       {/* Event description */}
