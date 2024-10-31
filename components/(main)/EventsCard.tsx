@@ -12,6 +12,7 @@ import Link from "next/link"; // Importing Next.js's Link component for client-s
  * @returns {JSX.Element} The rendered event card component.
  */
 export function EventsCard({ event }: { event: any }) {
+  console.log(event);
   // Determine if the event is in the past based on the event date
   const isPastEvent = new Date(event.date) < new Date();
 
@@ -35,12 +36,14 @@ export function EventsCard({ event }: { event: any }) {
       />
       {/* Event title */}
       <h2 className="font-bold text-xl">{event.title}</h2>
+      <p className="">{event.createdBy}</p>
       {/* Event date and location */}
       <p className="text-coolGray mt-2 text-xs">
         {formatDate(event.date)} | {event.location}{" "}
         {/* Display formatted date */}
         and location
       </p>
+
       {/* Event description */}
       <p className="text-coolGray text-xs mt-2">{event.description}</p>
       {/* Attendees or past attendees information */}

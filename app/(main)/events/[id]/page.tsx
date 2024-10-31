@@ -68,6 +68,10 @@ export default async function EventPage({
           {/* Event description */}
           <p className="text-pretty">{data.description}</p>
 
+          <p>
+            By: <b>{data.createdBy}</b>
+          </p>
+
           {/* Event date */}
           <div className="flex items-center divide-x divide-coolGray space-x-2">
             <p>
