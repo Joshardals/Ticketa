@@ -1,6 +1,6 @@
 # Ticketa
 
-**Ticketa** is a platform for students to easily buy and sell tickets for campus events. Whether it's a party, concert, or club event, Ticketa helps students find events, buy tickets securely, and manage their participation... 
+**Ticketa** is a platform for students to easily buy and sell tickets for campus events. Whether it's a party, concert, or club event, Ticketa helps students find events, buy tickets securely, and manage their participation... . 
 
 ## Key Features
 
